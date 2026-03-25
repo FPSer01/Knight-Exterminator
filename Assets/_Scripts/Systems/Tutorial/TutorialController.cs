@@ -1,20 +1,43 @@
+﻿using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
-public class TutorialController : MonoBehaviour
+public class TutorialController : NetworkBehaviour
 {
-    public static TutorialController Instance { get; private set; }
-
-    [SerializeField] private PlayerUI playerUI;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
+    [SerializeField] private Transform playerSpawnPosition;
 
     private void Start()
     {
         PlayerUI.BlockMap = true;
-        playerUI.SetMiniMapVisible(false);
+        StartGameData.Stance = StanceType.Attack;
+
+        StartCoroutine(WaitForPlayerSpawner());
+    }
+
+    private IEnumerator WaitForPlayerSpawner()
+    {
+        while (PlayerManager.Instance == null)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        foreach (var clientId in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            PlayerManager.Instance.SpawnPlayer(clientId, playerSpawnPosition.position);
+        }
+
+        PlayerManager.Instance.SetMiniMapVisibilityAll(false);
+
+        PlayerComponents playerComponents = null;
+
+        foreach (var netobj in NetworkManager.LocalClient.OwnedObjects)
+        {
+            playerComponents = netobj.GetComponent<PlayerComponents>();
+
+            if (playerComponents != null) break;
+        }
+
+        playerComponents.UI.LevelNameUI.ShowLevelLabel("Обучение", 1.5f, 3f);
     }
 
     public void UnlockMap()

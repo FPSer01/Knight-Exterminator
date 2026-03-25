@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,8 +24,10 @@ public class TutorialEnemySpawner : MonoBehaviour
         LockDoors(true);
 
         GameObject enemyObj = Instantiate(enemyPrefab, enemySpawnPoint.position, Quaternion.identity);
-        EnemyHealth enemy = enemyObj.GetComponent<EnemyHealth>();
-        enemy.OnDeath += Enemy_OnDeath;
+        EnemyComponents enemy = enemyObj.GetComponent<EnemyComponents>();
+        enemy.Health.OnDeath += Enemy_OnDeath;
+
+        enemy.NetworkObject.Spawn();
     }
 
     private void LockDoors(bool lockDoors)
