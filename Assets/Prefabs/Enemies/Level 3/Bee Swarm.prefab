@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4092363798407241368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5374703521561264962}
+  - component: {fileID: 3490022471196068857}
+  - component: {fileID: 2985003550284719061}
+  - component: {fileID: 2648303752869656409}
+  m_Layer: 0
+  m_Name: Bee Swarm
+  m_TagString: Untagged
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5374703521561264962
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4092363798407241368}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -28.75, y: 0, z: -8.14}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3490022471196068857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4092363798407241368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 675ba0bf97c74174d8d501972c381779, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  beeEnemyPrefab: {fileID: 934073239777026009, guid: 096ef09c28c122a4db6e56ba8a39baee, type: 3}
+  minSpawnAmount: 4
+  maxSpawnAmount: 5
+  spawnRange: 2
+  swarmDrops: {fileID: 2648303752869656409}
+  swarmHealth: {fileID: 2985003550284719061}
+--- !u!114 &2985003550284719061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4092363798407241368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446d2fd35f111e9499964bc7c90f1fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 0
+  currentHealth: 0
+  healthResist:
+    FlatResistance: 0
+    Physical: 0
+    Fire: 0
+    Electrical: 0
+    Poison: 0
+    Bloodloss: 0
+    Slowness: 0
+    Stun: 0
+  hitEffectPrefab: {fileID: 0}
+  hitEffectScale: {x: 1, y: 1, z: 1}
+  stunEffect: {fileID: 0}
+--- !u!114 &2648303752869656409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4092363798407241368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4370e9ab0dcbce84db63dcbe45edb7e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyHealth: {fileID: 2985003550284719061}
+  XPAmount: 188
+  dropPoint: {fileID: 0}
+  dropsSettings: {fileID: 11400000, guid: 081bf80ff34f0564f86e43dfa7ee636f, type: 2}
+  objectSpawnSettings: {fileID: 11400000, guid: a57a3f86444244844bae24ba6ece628b, type: 2}

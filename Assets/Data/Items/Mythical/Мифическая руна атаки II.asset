@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 447504930674dc1429cad9f1ea428975, type: 3}
+  m_Name: "\u041C\u0438\u0444\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u0440\u0443\u043D\u0430
+    \u0430\u0442\u0430\u043A\u0438 II"
+  m_EditorClassIdentifier: 
+  itemName: "\u041C\u0438\u0444\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u0440\u0443\u043D\u0430
+    \u0430\u0442\u0430\u043A\u0438 II"
+  itemDescription: "\u041C\u0438\u0444\u0438\u0447\u0435\u0441\u043A\u0430\u044F
+    \u0440\u0443\u043D\u0430, \u0434\u0430\u044E\u0449\u0430\u044F \u0431\u043E\u043B\u044C\u0448\u043E\u0435
+    \u0443\u0441\u0438\u043B\u0435\u043D\u0438\u0435 \u0430\u0442\u0430\u043A\u0438.
+    \u0423\u0441\u0438\u043B\u0438\u0432\u0430\u0435\u0442 <style=\"Highlight\">\u0430\u0442\u0430\u043A\u0443</style>
+    \u043D\u0430 <style=\"Buff\">22</style>."
+  type: 1
+  rarity: 2
+  itemSprite: {fileID: 21300000, guid: 8c2ae9b63a952b54287d903c0b928157, type: 3}
+  canBeSold: 1
+  buyCost: 600
+  sellCost: 300
+  flatDamage:
+    Physical: 22
+    Fire: 0
+    Electrical: 0
+    StatusData:
+      Poison: 0
+      PoisonWearOffTime: 0
+      Bloodloss: 0
+      BloodlossWearOffTime: 0
+      SlownessAmount: 0
+      SlownessIntensity: 0
+      SlownessWearOffTime: 0
+      StunAmount: 0
+      StunWearOffTime: 0
+  elementPercentDamageFromPhysical: 0
+  percentDamage:
+    Physical: 0
+    Fire: 0
+    Electrical: 0
+    StatusData:
+      Poison: 0
+      PoisonWearOffTime: 0
+      Bloodloss: 0
+      BloodlossWearOffTime: 0
+      SlownessAmount: 0
+      SlownessIntensity: 0
+      SlownessWearOffTime: 0
+      StunAmount: 0
+      StunWearOffTime: 0
+  flatHealth: 0
+  percentHealth: 0
+  resist:
+    FlatResistance: 0
+    Physical: 0
+    Fire: 0
+    Electrical: 0
+    Poison: 0
+    Bloodloss: 0
+    Slowness: 0
+    Stun: 0
+  percentFlatResistance: 0
+  flatStamina: 0
+  percentStamina: 0
+  percentStanceDamage: 0
+  flatStanceCooldown: 0
+  percentStanceCooldown: 0
+  flatStanceDuration: 0
+  percentStanceDuration: 0
+  specialEffect: 0
+  vampirismHealPercent: 0

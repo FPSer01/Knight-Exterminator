@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d58f6e99050c14d8c8c6fdb9a5c6e0, type: 3}
+  m_Name: Level 3 EnemySpawnSettings
+  m_EditorClassIdentifier: 
+  enemies:
+  - EnemyPrefab: {fileID: 4092363798407241368, guid: f6d7bfb6b1e5877449f7b59dd1fa7698, type: 3}
+    Chance: 0.5
+  - EnemyPrefab: {fileID: 6815149483761275334, guid: bb6803271d9f4c74fa4d5fe9c99e47f6, type: 3}
+    Chance: 0.3
+  - EnemyPrefab: {fileID: 3149217649067917348, guid: 57fd66a14619a014fb03cc3df4d9eb59, type: 3}
+    Chance: 0.2
