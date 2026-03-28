@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
@@ -40,14 +41,24 @@ public class LobbyWindow : MainMenuWindow
 
     private void OnEnable()
     {
-        GameNetworkManager.Instance.OnPlayerConnected += Lobby_OnPlayerConnected;
-        GameNetworkManager.Instance.OnPlayerDisconnected += Lobby_OnPlayerDisconnected;
+        StartCoroutine(WaitForNetworkManager());
     }
 
     private void OnDisable()
     {
-        GameNetworkManager.Instance.OnPlayerConnected -= Lobby_OnPlayerConnected;
-        GameNetworkManager.Instance.OnPlayerDisconnected -= Lobby_OnPlayerDisconnected;
+        if (NetworkManager.Singleton != null)
+        {
+            GameNetworkManager.Instance.OnClientConnectedCallback -= Lobby_OnPlayerConnected;
+            GameNetworkManager.Instance.OnClientDisconnectCallback -= Lobby_OnPlayerDisconnected;
+        }
+    }
+
+    private IEnumerator WaitForNetworkManager()
+    {
+        yield return new WaitUntil(() => NetworkManager.Singleton != null);
+
+        GameNetworkManager.Instance.OnClientConnectedCallback += Lobby_OnPlayerConnected;
+        GameNetworkManager.Instance.OnClientDisconnectCallback += Lobby_OnPlayerDisconnected;
     }
 
     public override void SetWindowActive(bool active, float timeToSwitch = 0.1f)

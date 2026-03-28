@@ -23,13 +23,13 @@ public class GameNetworkManager : NetworkManager
 
     private bool blockDisconnectHandlers = false;
 
-    #region Public Fields (Public Interface)
+    #region Public Interface
 
-    public event Action<ulong> OnPlayerConnected;
+/*    public event Action<ulong> OnPlayerConnected;
     public event Action<ulong> OnPlayerDisconnected;
 
     private void DoPlayerConnected(ulong clientId) { OnPlayerConnected?.Invoke(clientId); }
-    private void DoPlayerDisconnected(ulong clientId) { OnPlayerDisconnected?.Invoke(clientId); }
+    private void DoPlayerDisconnected(ulong clientId) { OnPlayerDisconnected?.Invoke(clientId); }*/
 
     public static GameNetworkManager Instance { get; private set; }
     public UnityTransport Transport { get; private set; }
@@ -172,7 +172,7 @@ public class GameNetworkManager : NetworkManager
             Debug.Log($"Connected Client Id: [{clientId}]. Clients: {Singleton.ConnectedClientsIds.Count}/{maxPlayers}.");
         }
 
-        DoPlayerConnected(clientId);
+        //DoPlayerConnected(clientId);
     }
 
     private void OnClientDisconnected(ulong clientId)
@@ -184,13 +184,13 @@ public class GameNetworkManager : NetworkManager
             DetermineExitBehaviour();
         }
 
-        if (Singleton.IsHost)
+        if (Singleton.IsServer)
         {
             clientNames.Remove(clientId);
             Debug.Log($"Disconnected client id: {clientId}. Clients: {Singleton.ConnectedClientsIds.Count}/{maxPlayers}.");
         }
 
-        DoPlayerDisconnected(clientId);
+        //DoPlayerDisconnected(clientId);
 
         blockDisconnectHandlers = false;
     }

@@ -53,8 +53,6 @@ MonoBehaviour:
     PlayerPrefab: {fileID: 1754401905866537068, guid: 5dbbedac2b238624e819286e073f8198, type: 3}
     Prefabs:
       NetworkPrefabsLists:
-      - {fileID: 11400000, guid: 3e3acc51eea63834ea243e0583bb5da1, type: 2}
-      - {fileID: 11400000, guid: 055bf8567c0e7d34983a9bce8c3e949e, type: 2}
       - {fileID: 11400000, guid: 2ffbff93936c0f947a88ec8f42a2af6f, type: 2}
     TickRate: 64
     ClientConnectionBufferTimeout: 10
@@ -123,9 +121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98d9db9626104da59357651088226725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PresetAsset: {fileID: 11400000, guid: d84dd439c5485b6488600f18704e1591, type: 2}
+  m_PresetAsset: {fileID: 0}
   m_PresetReference:
-    rid: -2
+    rid: 1213783420152316031
   m_Scenario:
     rid: -2
   m_IsScenarioSettingsFolded: 0
@@ -135,3 +133,12 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 1213783420152316031
+      type: {class: NetworkSimulatorPreset, ns: Unity.Multiplayer.Tools.NetworkSimulator.Runtime, asm: Unity.Multiplayer.Tools.NetworkSimulator.Runtime}
+      data:
+        <Name>k__BackingField: None
+        <Description>k__BackingField: 
+        <PacketDelayMs>k__BackingField: 0
+        <PacketJitterMs>k__BackingField: 0
+        <PacketLossInterval>k__BackingField: 0
+        <PacketLossPercent>k__BackingField: 0
