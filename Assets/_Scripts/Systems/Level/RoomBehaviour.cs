@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class RoomBehaviour : LevelPrimitive
 {
@@ -42,9 +43,10 @@ public class RoomBehaviour : LevelPrimitive
 
     public Transform TeleportPoint => teleportPoint;
     public BoxCollider TriggerCollider { get => triggerCollider; }
+    public Vector2Int RoomIndex { get => roomIndex; }
 
     /// <summary>Срабатывает только когда локальный игрок вошёл в комнату.</summary>
-    public event Action<Vector2Int> OnPlayerEnterRoom;
+    public event Action<ulong, Vector2Int> OnPlayerEnterRoom;
 
     /// <summary>Устанавливается из LevelBuilder после создания комнаты.</summary>
     public void SetRoomIndex(Vector2Int index) => roomIndex = index;
@@ -87,15 +89,19 @@ public class RoomBehaviour : LevelPrimitive
         LevelManager.Instance.EndRoomBattle_ServerRpc(roomIndex);
     }
 
-    public void StartBattle(bool summonEnemies = true)
+    /// <summary>
+    /// Запустить сражение локально
+    /// </summary>
+    /// <param name="summonEnemies"></param>
+    public void StartBattle_Local(bool summonEnemies = true, bool checkForEntered = true)
     {
-        if (entered)
+        if (entered && checkForEntered)
             return;
 
         entered = true;
         OpenRoom(false);
-        PlayerUI.BlockMap = true;
         LevelMusicController.Instance.SetBattleMusic(true);
+        PlayerUI.BlockMap = true;
 
         if (NetworkManager.Singleton.IsServer && spawner != null && summonEnemies)
         {
@@ -104,29 +110,28 @@ public class RoomBehaviour : LevelPrimitive
         }
     }
 
-    public void EndBattle()
+    /// <summary>
+    /// Остановить сражение локально
+    /// </summary>
+    public void EndBattle_Local(bool checkForCleared = true)
     {
-        if (cleared)
+        if (cleared && checkForCleared)
             return;
 
         cleared = true;
         OpenRoom(true);
-        PlayerUI.BlockMap = false;
         LevelMusicController.Instance.SetBattleMusic(false);
-        PlayerManager.Instance.BlockMapAll(false);
+        PlayerUI.BlockMap = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (spawnEnemies && !entered)
+        PlayerComponents components = other.GetComponentInParent<PlayerComponents>();
+
+        if (spawnEnemies && !entered && components != null)
         {
-            PlayerComponents components = other.GetComponentInParent<PlayerComponents>();
-
-            StartBattle();
-
             LevelManager.Instance.StartRoomBattle_ServerRpc(roomIndex);
             LevelManager.Instance.TeleportPlayers(components.OwnerClientId, other.transform.position, roomIndex);
-            PlayerManager.Instance.BlockMapAll(true);
         }
         else if (!spawnEnemies && !entered)
         {
@@ -134,7 +139,8 @@ public class RoomBehaviour : LevelPrimitive
             cleared = true;
         }
 
-        OnPlayerEnterRoom?.Invoke(roomIndex);
+        if (components != null)
+            OnPlayerEnterRoom?.Invoke(components.OwnerClientId, roomIndex);
     }
 
     private void OnValidate()

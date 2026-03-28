@@ -20,6 +20,9 @@ public class InteractableObject : NetworkBehaviour, IInteractable
 
     public virtual void HighlightObject(bool highlight)
     {
+        if (outline == null)
+            return;
+
         if (!enabled)
         {
             outline.enabled = false;

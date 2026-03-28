@@ -85,7 +85,8 @@ public class BossHealth : EntityHealth, ICameraLockable
             CheckForDeath_ClientSide();
         }
 
-        BossHealthUI.Instance.UpdateDamageNumber(finalDamage);
+        if (BossRoom.Instance != null)
+            BossRoom.Instance.UpdateBossHealthUIDamageNumbers(finalDamage);
 
         return finalDamage;
     }
@@ -132,7 +133,8 @@ public class BossHealth : EntityHealth, ICameraLockable
 
     protected override void UpdateHealthUI()
     {
-        BossHealthUI.Instance.UpdateHealthBar(currentHealth.Value / maxHealth);
+        if (BossRoom.Instance != null)
+            BossRoom.Instance.UpdateBossHealthUI(currentHealth.Value / maxHealth);
     }
 
     private void UpdatePhase()

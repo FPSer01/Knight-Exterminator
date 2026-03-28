@@ -19,6 +19,8 @@ public class PlayerAttackBase : NetworkBehaviour
     protected bool vampirism = false;
     protected float percentHealFromAttack = 0f;
 
+    protected bool infiniteDamageCheatEnabled = false;
+
     public AttackDamageType AttackDamage
     {
         get => attackDamage;
@@ -29,6 +31,7 @@ public class PlayerAttackBase : NetworkBehaviour
         }
     }
     public float AttackSpeedMult { get => attackSpeedMult; set => ChangeAttackSpeedMult(value); }
+    public bool EnableInfiniteDamage { get => infiniteDamageCheatEnabled; set => infiniteDamageCheatEnabled = value; }
 
     public override void OnNetworkSpawn()
     {
@@ -70,7 +73,7 @@ public class PlayerAttackBase : NetworkBehaviour
 
     protected void StartAttackInput(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if (playerStamina.CurrentStamina < StaminaConsumage.ATTACK || blockAttack)
+        if (playerStamina.CurrentStamina < playerStamina.AttackConsumage || blockAttack)
             return;
 
         SetAttackInput(true);

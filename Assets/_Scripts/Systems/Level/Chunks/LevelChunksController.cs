@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class LevelChunksController : MonoBehaviour
 {
+    private readonly static string DEBUG_TAG = $"[{LogTags.PINK_COLOR}Chunks{LogTags.END_COLOR}]";
+
     [Header("Chunks")]
     [SerializeField] private List<LevelChunk> chunks = new();
     private LevelChunk currentChunk = null;
@@ -64,13 +66,18 @@ public class LevelChunksController : MonoBehaviour
         if (!enableCulling || currentCamera == null)
             return;
 
+        if (!currentCamera.enabled)
+        {
+            StartCoroutine(TryGetClientCamera());
+        }
+
         LevelChunk nearest = FindNearestChunk();
 
         if (nearest != currentChunk)
         {
             currentChunk = nearest;
             RefreshCulling();
-            Debug.Log($"[Chunks] Entered [{currentChunk.Index.x}, {currentChunk.Index.y}]");
+            Debug.Log($"{DEBUG_TAG} Entered [{currentChunk.Index.x}, {currentChunk.Index.y}]");
         }
     }
 

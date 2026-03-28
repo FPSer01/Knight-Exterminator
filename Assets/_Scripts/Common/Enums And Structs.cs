@@ -460,5 +460,14 @@ public class LogTags
     public const string GREEN_COLOR = "<color=#00FF00>";
     public const string BLUE_COLOR = "<color=#0000FF>";
 
+    public const string ORANGE_COLOR = "<color=#FFBD31>";
+    public const string PURPLE_COLOR = "<color=#800080>";
+    public const string PINK_COLOR = "<color=#FFC0CB>";
+    public const string YELLOW_COLOR = "<color=#FFFF00>";
+    public const string CYAN_COLOR = "<color=#00FFFF>";
+
     public const string END_COLOR = "</color>";
+
+    public const string BOLD_OPEN = "<b>";
+    public const string BOLD_CLOSE = "</b>";
 }

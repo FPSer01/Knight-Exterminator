@@ -1,5 +1,4 @@
 ﻿using Unity.Netcode;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class LevelExitObject : InteractableObject

@@ -51,6 +51,8 @@ public class PlayerHealth : EntityHealth
     private bool slowed = false;
     private bool healing = false;
 
+    private bool infiniteHealthCheatEnabled = false;
+
     private IEnumerator invincibilityCoroutine;
  
     public bool Stunned { get => stunned; }
@@ -59,6 +61,7 @@ public class PlayerHealth : EntityHealth
     public int CurrentHealAmount { get => currentHealAmount; }
     public bool Healing { get => healing; }
     public int CurrentReviveAmount { get => currentReviveAmount; }
+    public bool EnableInfiniteHealth { get => infiniteHealthCheatEnabled; set => infiniteHealthCheatEnabled = value; }
 
     private Coroutine healVFXCoroutine;
 
@@ -192,7 +195,8 @@ public class PlayerHealth : EntityHealth
         ChangeClientSideHealth(clientSideHealth + healAmount);
     }
 
-    public void ChangeHealsAmount(int amountToAdd)
+    [Rpc(SendTo.Owner)]
+    public void ChangeHealsAmount_OwnerRpc(int amountToAdd)
     {
         int oldAmount = healAmount;
         int newAmount = healAmount + amountToAdd;
@@ -231,6 +235,12 @@ public class PlayerHealth : EntityHealth
 
     private bool CheckForTakeDamageIgnore()
     {
+#if UNITY_EDITOR || DEBUG
+        if (infiniteHealthCheatEnabled)
+        {
+            return true;
+        }
+#endif
         return IsDead || playerMovement.Dodging || !canTakeDamage || CheckAvoidence() || !IsOwner;
     }
 

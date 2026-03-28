@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using TMPro;
-using Unity.Netcode;
-using UnityEditor.PackageManager;
+п»їusing TMPro;
 using UnityEngine;
 
 public class MenuMultiplayerGameWindow : MainMenuWindow
@@ -103,7 +99,7 @@ public class MenuMultiplayerGameWindow : MainMenuWindow
 
             if (!success)
             {
-                Debug.LogError("Ошибка при подключении.");
+                Debug.LogError("РћС€РёР±РєР° РїСЂРё РїРѕРґРєР»СЋС‡РµРЅРёРё.");
                 return;
             }
 
@@ -119,7 +115,7 @@ public class MenuMultiplayerGameWindow : MainMenuWindow
 
             if (!success)
             {
-                Debug.LogError("Ошибка при создании сервера.");
+                Debug.LogError("РћС€РёР±РєР° РїСЂРё СЃРѕР·РґР°РЅРёРё СЃРµСЂРІРµСЂР°.");
                 return;
             }
 

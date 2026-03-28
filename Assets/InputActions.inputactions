@@ -426,15 +426,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "DebugCursor",
-                    "type": "Button",
-                    "id": "5fbadc89-631b-4543-bf22-0450fea30e2b",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -899,17 +890,6 @@
                     "action": "HideHUD",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6545b1e5-2b33-41d6-a8fb-54e853a6d9ec",
-                    "path": "<Keyboard>/slash",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "DebugCursor",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         },
@@ -1104,6 +1084,94 @@
                     "action": "ScrollWheel",
                     "isComposite": false,
                     "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Debug",
+            "id": "6d1be255-8c7a-4f5e-bb67-8388cf4e8ca0",
+            "actions": [
+                {
+                    "name": "DebugCursor",
+                    "type": "Button",
+                    "id": "be07b237-763f-4e6e-8852-2b8eefa4264a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "InfiniteHealth",
+                    "type": "Button",
+                    "id": "8b60d72d-5b3e-451d-b279-5d3b0a444f42",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "InfiniteDamage",
+                    "type": "Button",
+                    "id": "50e30487-e4eb-427c-9062-7c83c2383412",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "InfiniteStamina",
+                    "type": "Button",
+                    "id": "b5a87539-d7be-4657-a892-dfbecb4936e7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f2f37038-4f24-4a39-9a79-fc841d9390dc",
+                    "path": "<Keyboard>/numpad1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InfiniteHealth",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b566a44c-a3fb-4475-88ec-f62122ad503b",
+                    "path": "<Keyboard>/slash",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DebugCursor",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a0efe8a9-ec67-4210-b705-70ccb39053e8",
+                    "path": "<Keyboard>/numpad2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InfiniteDamage",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ab4b9979-7e76-4092-8dad-bbe7aed507c7",
+                    "path": "<Keyboard>/numpad3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InfiniteStamina",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

@@ -14,13 +14,19 @@ public class BossTeleportObject : InteractableObject
     [Rpc(SendTo.Server)]
     private void TryEnterBossRoom_ServerRpc()
     {
+        TryEnterBossBattle();
+        Debug.Log("Try Enter Boss Room...");
+    }
+
+    private void TryEnterBossBattle()
+    {
         if (BossRoom.Instance != null)
         {
             BossRoom.Instance.BeginBossBattle();
         }
         else
         {
-            Debug.LogError("Комнаты босса нет!");
+            Debug.LogError("No Boss Room in Scene!");
         }
     }
 }

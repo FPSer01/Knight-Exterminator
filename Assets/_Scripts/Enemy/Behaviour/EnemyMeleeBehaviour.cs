@@ -112,7 +112,10 @@ public class EnemyMeleeBehaviour : BaseEnemyBehaviour
 
         if (Wait(waitTime))
         {
-            PredictRotateTowardsTarget(rotateSpeed, 2f);
+            if (IsNearCurrentTarget(attackDistance))
+                PredictRotateTowardsTarget(rotateSpeed, 2f);
+            else
+                RotateTowardsTarget(rotateSpeed);
 
             if (CanMeleeStrike())
             {

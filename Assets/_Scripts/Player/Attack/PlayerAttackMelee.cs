@@ -79,11 +79,11 @@ public class PlayerAttackMelee : PlayerAttackBase
         }
 
         sfxController.PlayAttackSFX(false);
-        playerStamina.ConsumeStamina(StaminaConsumage.ATTACK);
+        playerStamina.ConsumeStamina(playerStamina.AttackConsumage);
 
         attackColliders[attackIndex].FixedUpdateAttackCheck();
 
-        if (playerStamina.CurrentStamina < StaminaConsumage.ATTACK && attackInput)
+        if (playerStamina.CurrentStamina < playerStamina.AttackConsumage && attackInput)
         {
             SetAttackInput(false);
             SetCurrentAttackIndex(0);
@@ -110,7 +110,17 @@ public class PlayerAttackMelee : PlayerAttackBase
 
     private void AttackCollider_OnEnemyHit(EntityHealth enemy, HitTransform hit)
     {
-        float enemyDamagetaken = enemy.TakeDamage(attackDamage, playerHealth);
+        var damage = attackDamage;
+
+#if UNITY_EDITOR || DEBUG
+        if (infiniteDamageCheatEnabled)
+        {
+            damage = attackDamage.GetMultDamage(99999);
+            damage.IgnoreDefence = true;
+        }
+#endif
+
+        float enemyDamagetaken = enemy.TakeDamage(damage, playerHealth);
         enemy.CreateHitEffect(hit);
 
         TryVampireHeal(enemyDamagetaken);

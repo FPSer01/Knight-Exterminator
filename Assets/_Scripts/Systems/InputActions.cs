@@ -448,15 +448,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""DebugCursor"",
-                    ""type"": ""Button"",
-                    ""id"": ""5fbadc89-631b-4543-bf22-0450fea30e2b"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -921,17 +912,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""HideHUD"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6545b1e5-2b33-41d6-a8fb-54e853a6d9ec"",
-                    ""path"": ""<Keyboard>/slash"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""DebugCursor"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1128,6 +1108,94 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Debug"",
+            ""id"": ""6d1be255-8c7a-4f5e-bb67-8388cf4e8ca0"",
+            ""actions"": [
+                {
+                    ""name"": ""DebugCursor"",
+                    ""type"": ""Button"",
+                    ""id"": ""be07b237-763f-4e6e-8852-2b8eefa4264a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InfiniteHealth"",
+                    ""type"": ""Button"",
+                    ""id"": ""8b60d72d-5b3e-451d-b279-5d3b0a444f42"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InfiniteDamage"",
+                    ""type"": ""Button"",
+                    ""id"": ""50e30487-e4eb-427c-9062-7c83c2383412"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InfiniteStamina"",
+                    ""type"": ""Button"",
+                    ""id"": ""b5a87539-d7be-4657-a892-dfbecb4936e7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f2f37038-4f24-4a39-9a79-fc841d9390dc"",
+                    ""path"": ""<Keyboard>/numpad1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InfiniteHealth"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b566a44c-a3fb-4475-88ec-f62122ad503b"",
+                    ""path"": ""<Keyboard>/slash"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DebugCursor"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0efe8a9-ec67-4210-b705-70ccb39053e8"",
+                    ""path"": ""<Keyboard>/numpad2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InfiniteDamage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab4b9979-7e76-4092-8dad-bbe7aed507c7"",
+                    ""path"": ""<Keyboard>/numpad3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InfiniteStamina"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1221,7 +1289,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_UI_Inventory = m_UI.FindAction("Inventory", throwIfNotFound: true);
         m_UI_Map = m_UI.FindAction("Map", throwIfNotFound: true);
         m_UI_HideHUD = m_UI.FindAction("HideHUD", throwIfNotFound: true);
-        m_UI_DebugCursor = m_UI.FindAction("DebugCursor", throwIfNotFound: true);
         // Map
         m_Map = asset.FindActionMap("Map", throwIfNotFound: true);
         m_Map_LeftClick = m_Map.FindAction("LeftClick", throwIfNotFound: true);
@@ -1230,6 +1297,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Map_RightClick = m_Map.FindAction("RightClick", throwIfNotFound: true);
         m_Map_MoveMap = m_Map.FindAction("MoveMap", throwIfNotFound: true);
         m_Map_ScrollWheel = m_Map.FindAction("ScrollWheel", throwIfNotFound: true);
+        // Debug
+        m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
+        m_Debug_DebugCursor = m_Debug.FindAction("DebugCursor", throwIfNotFound: true);
+        m_Debug_InfiniteHealth = m_Debug.FindAction("InfiniteHealth", throwIfNotFound: true);
+        m_Debug_InfiniteDamage = m_Debug.FindAction("InfiniteDamage", throwIfNotFound: true);
+        m_Debug_InfiniteStamina = m_Debug.FindAction("InfiniteStamina", throwIfNotFound: true);
     }
 
     ~@InputActions()
@@ -1237,6 +1310,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, InputActions.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputActions.UI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Map.enabled, "This will cause a leak and performance issues, InputActions.Map.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Debug.enabled, "This will cause a leak and performance issues, InputActions.Debug.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -1430,7 +1504,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_Inventory;
     private readonly InputAction m_UI_Map;
     private readonly InputAction m_UI_HideHUD;
-    private readonly InputAction m_UI_DebugCursor;
     public struct UIActions
     {
         private @InputActions m_Wrapper;
@@ -1449,7 +1522,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @Inventory => m_Wrapper.m_UI_Inventory;
         public InputAction @Map => m_Wrapper.m_UI_Map;
         public InputAction @HideHUD => m_Wrapper.m_UI_HideHUD;
-        public InputAction @DebugCursor => m_Wrapper.m_UI_DebugCursor;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1501,9 +1573,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @HideHUD.started += instance.OnHideHUD;
             @HideHUD.performed += instance.OnHideHUD;
             @HideHUD.canceled += instance.OnHideHUD;
-            @DebugCursor.started += instance.OnDebugCursor;
-            @DebugCursor.performed += instance.OnDebugCursor;
-            @DebugCursor.canceled += instance.OnDebugCursor;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1550,9 +1619,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @HideHUD.started -= instance.OnHideHUD;
             @HideHUD.performed -= instance.OnHideHUD;
             @HideHUD.canceled -= instance.OnHideHUD;
-            @DebugCursor.started -= instance.OnDebugCursor;
-            @DebugCursor.performed -= instance.OnDebugCursor;
-            @DebugCursor.canceled -= instance.OnDebugCursor;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1656,6 +1722,76 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         }
     }
     public MapActions @Map => new MapActions(this);
+
+    // Debug
+    private readonly InputActionMap m_Debug;
+    private List<IDebugActions> m_DebugActionsCallbackInterfaces = new List<IDebugActions>();
+    private readonly InputAction m_Debug_DebugCursor;
+    private readonly InputAction m_Debug_InfiniteHealth;
+    private readonly InputAction m_Debug_InfiniteDamage;
+    private readonly InputAction m_Debug_InfiniteStamina;
+    public struct DebugActions
+    {
+        private @InputActions m_Wrapper;
+        public DebugActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @DebugCursor => m_Wrapper.m_Debug_DebugCursor;
+        public InputAction @InfiniteHealth => m_Wrapper.m_Debug_InfiniteHealth;
+        public InputAction @InfiniteDamage => m_Wrapper.m_Debug_InfiniteDamage;
+        public InputAction @InfiniteStamina => m_Wrapper.m_Debug_InfiniteStamina;
+        public InputActionMap Get() { return m_Wrapper.m_Debug; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DebugActions set) { return set.Get(); }
+        public void AddCallbacks(IDebugActions instance)
+        {
+            if (instance == null || m_Wrapper.m_DebugActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_DebugActionsCallbackInterfaces.Add(instance);
+            @DebugCursor.started += instance.OnDebugCursor;
+            @DebugCursor.performed += instance.OnDebugCursor;
+            @DebugCursor.canceled += instance.OnDebugCursor;
+            @InfiniteHealth.started += instance.OnInfiniteHealth;
+            @InfiniteHealth.performed += instance.OnInfiniteHealth;
+            @InfiniteHealth.canceled += instance.OnInfiniteHealth;
+            @InfiniteDamage.started += instance.OnInfiniteDamage;
+            @InfiniteDamage.performed += instance.OnInfiniteDamage;
+            @InfiniteDamage.canceled += instance.OnInfiniteDamage;
+            @InfiniteStamina.started += instance.OnInfiniteStamina;
+            @InfiniteStamina.performed += instance.OnInfiniteStamina;
+            @InfiniteStamina.canceled += instance.OnInfiniteStamina;
+        }
+
+        private void UnregisterCallbacks(IDebugActions instance)
+        {
+            @DebugCursor.started -= instance.OnDebugCursor;
+            @DebugCursor.performed -= instance.OnDebugCursor;
+            @DebugCursor.canceled -= instance.OnDebugCursor;
+            @InfiniteHealth.started -= instance.OnInfiniteHealth;
+            @InfiniteHealth.performed -= instance.OnInfiniteHealth;
+            @InfiniteHealth.canceled -= instance.OnInfiniteHealth;
+            @InfiniteDamage.started -= instance.OnInfiniteDamage;
+            @InfiniteDamage.performed -= instance.OnInfiniteDamage;
+            @InfiniteDamage.canceled -= instance.OnInfiniteDamage;
+            @InfiniteStamina.started -= instance.OnInfiniteStamina;
+            @InfiniteStamina.performed -= instance.OnInfiniteStamina;
+            @InfiniteStamina.canceled -= instance.OnInfiniteStamina;
+        }
+
+        public void RemoveCallbacks(IDebugActions instance)
+        {
+            if (m_Wrapper.m_DebugActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IDebugActions instance)
+        {
+            foreach (var item in m_Wrapper.m_DebugActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_DebugActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public DebugActions @Debug => new DebugActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1730,7 +1866,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnInventory(InputAction.CallbackContext context);
         void OnMap(InputAction.CallbackContext context);
         void OnHideHUD(InputAction.CallbackContext context);
-        void OnDebugCursor(InputAction.CallbackContext context);
     }
     public interface IMapActions
     {
@@ -1740,5 +1875,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnMoveMap(InputAction.CallbackContext context);
         void OnScrollWheel(InputAction.CallbackContext context);
+    }
+    public interface IDebugActions
+    {
+        void OnDebugCursor(InputAction.CallbackContext context);
+        void OnInfiniteHealth(InputAction.CallbackContext context);
+        void OnInfiniteDamage(InputAction.CallbackContext context);
+        void OnInfiniteStamina(InputAction.CallbackContext context);
     }
 }

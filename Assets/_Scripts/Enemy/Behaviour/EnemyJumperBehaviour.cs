@@ -138,7 +138,10 @@ public class EnemyJumperBehaviour : BaseEnemyBehaviour
             sfxController.PlayMoveSFX(false);
         }
 
-        RotateTowardsTarget(rotateSpeed);
+        if (IsNearCurrentTarget(attackDistance / 2))
+            PredictRotateTowardsTarget(rotateSpeed, 2f);
+        else
+            RotateTowardsTarget(rotateSpeed);
 
         if (attackAngle >= GetHorizontalAngleToTarget())
         {

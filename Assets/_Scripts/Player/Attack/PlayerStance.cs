@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class PlayerStance : NetworkBehaviour
 {
+    private readonly static string DEBUG_TAG = $"[{LogTags.BLUE_COLOR}Player Stance{LogTags.END_COLOR}]";
+
     [Header("Settings")]
     [SerializeField] private List<StanceInfo> avalableStances;
     [Space]
@@ -189,7 +191,7 @@ public class PlayerStance : NetworkBehaviour
         playerMovement.OverallMoveSpeedMult = 1f;
 
         if (displayMessage)
-            Debug.Log("<color=#0000FF>[PLAYER SKILL]</color> Skill State Reset");
+            Debug.Log($"{DEBUG_TAG} Skill State Reset");
     }
 
     [Rpc(SendTo.Owner)]

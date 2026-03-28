@@ -4,6 +4,8 @@ using static PamukAI.PAI;
 
 public class EnemyMimicBehaviour : BaseEnemyBehaviour
 {
+    private const string MIMIC_ROOM_TAG = "Mimic Room";
+
     [Header("Mimic Behaviour: General")]
     [SerializeField] private float attackDistance;
     [SerializeField] private float wakeUpTime;
@@ -30,6 +32,8 @@ public class EnemyMimicBehaviour : BaseEnemyBehaviour
             agent.enabled = true;
             mimicObject.OnWakeUp += Mimic_OnWakeUp;
             mimicHealth.OnDeath += Mimic_OnDeath;
+
+            TryFindBoundRoom();
         }
 
         mimicHealth.SetIgnoreDamage(true);
@@ -45,11 +49,59 @@ public class EnemyMimicBehaviour : BaseEnemyBehaviour
         base.OnNetworkDespawn();
     }
 
-    private void Mimic_OnWakeUp()
+    private void TryFindBoundRoom()
+    {
+        if (!IsServer || boundRoom != null)
+            return;
+
+        var mimicRooms = GameObject.FindGameObjectsWithTag(MIMIC_ROOM_TAG);
+
+        if (mimicRooms.Length <= 0)
+        {
+            Debug.LogError("Объект мимика не нашел комнату для привязки");
+            return;
+        }
+
+        GameObject nearestRoomObj = null;
+        float minDistance = float.MaxValue;
+
+        foreach (var room in mimicRooms)
+        {
+            float distance = Vector3.Distance(transform.position, room.transform.position);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestRoomObj = room;
+            }
+        }
+
+        if (!nearestRoomObj.TryGetComponent(out RoomBehaviour roomBehaviour))
+        {
+            Debug.LogError("Объект мимика не нашел комнату для привязки");
+            return;
+        }
+
+        boundRoom = roomBehaviour;
+        Debug.Log("Мимик привязан к комнате");
+    }
+
+    private void Mimic_OnWakeUp(ulong senderId)
     {
         if (boundRoom != null)
-            boundRoom.StartBattle(false);
+        {
+            if (!NetworkManager.ConnectedClients.TryGetValue(senderId, out var client))
+                return;
 
+            var senderNetObj = client.PlayerObject;
+            var components = senderNetObj.GetComponent<PlayerComponents>();
+
+            LevelManager.Instance.StartRoomBattle_ServerRpc(boundRoom.RoomIndex, false);
+            LevelManager.Instance.TeleportPlayers(senderId, components.Movement.transform.position, boundRoom.RoomIndex, false, true);
+
+            Debug.Log($"Mimic Battle Start. NetObject Sender: {client.PlayerObject.name}");
+        }
+          
         animator.SetTrigger("Wake Up");
         Invoke(nameof(WakeUpEnd), wakeUpTime);
     }
@@ -57,7 +109,10 @@ public class EnemyMimicBehaviour : BaseEnemyBehaviour
     private void Mimic_OnDeath()
     {
         if (boundRoom != null)
-            boundRoom.EndBattle();
+        {
+            LevelManager.Instance.EndRoomBattle_ServerRpc(boundRoom.RoomIndex, false);
+            Debug.Log("Mimic Battle End");
+        }
     }
 
     private void WakeUpEnd()

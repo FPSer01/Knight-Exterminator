@@ -86,7 +86,7 @@ public class PlayerUI : NetworkBehaviour
             InputManager.Input.UI.Map.started += MapInput;
             InputManager.Input.UI.HideHUD.started += HideHUDInput;
 
-            InputManager.Input.UI.DebugCursor.started += DebugCursorInput;
+            InputManager.Input.Debug.DebugCursor.started += DebugCursorInput;
         }
         else
         {
@@ -95,7 +95,7 @@ public class PlayerUI : NetworkBehaviour
             InputManager.Input.UI.Map.started -= MapInput;
             InputManager.Input.UI.HideHUD.started -= HideHUDInput;
 
-            InputManager.Input.UI.DebugCursor.started -= DebugCursorInput;
+            InputManager.Input.Debug.DebugCursor.started -= DebugCursorInput;
         }
     }
 

@@ -184,7 +184,7 @@ public class PlayerMovement : NetworkBehaviour
         if (movementInfo.Dodging || movementInfo.DodgeCooldown || blockMovement || blockDodging)
             return;
 
-        if (movementInfo.OnGround && moveInput != Vector2.zero && playerStamina.CurrentStamina >= StaminaConsumage.DODGE)
+        if (movementInfo.OnGround && moveInput != Vector2.zero && playerStamina.CurrentStamina >= playerStamina.DodgeConsumage)
         {
             StartCoroutine(InitiateDodge());
         }
@@ -341,7 +341,7 @@ public class PlayerMovement : NetworkBehaviour
 
     public void StartSprint()
     {
-        playerStamina.ConsumeStaminaContinuously(true, StaminaConsumage.SPRINT);
+        playerStamina.ConsumeStaminaContinuously(true, playerStamina.SprintConsumage);
 
         movementInfo.Sprinting = true;
 
@@ -405,14 +405,14 @@ public class PlayerMovement : NetworkBehaviour
 
     private void Jump()
     {
-        if (playerStamina.CurrentStamina < StaminaConsumage.JUMP)
+        if (playerStamina.CurrentStamina < playerStamina.JumpConsumage)
             return;
 
         ResetJumpBuffer();
 
         animator.SetTrigger("Jump Input");
         PlayJumpSFX();
-        playerStamina.ConsumeStamina(StaminaConsumage.JUMP);
+        playerStamina.ConsumeStamina(playerStamina.JumpConsumage);
 
         StartCoroutine(InitiateJump());
     }
@@ -475,7 +475,7 @@ public class PlayerMovement : NetworkBehaviour
 
     private IEnumerator InitiateDodge()
     {
-        playerStamina.ConsumeStamina(StaminaConsumage.DODGE);
+        playerStamina.ConsumeStamina(playerStamina.DodgeConsumage);
         StopMoveSFX();
         PlayDodgeSFX();
         EnableJumpVFX(true);
@@ -734,9 +734,13 @@ public class PlayerMovement : NetworkBehaviour
     public void RequestTeleport_OwnerRpc(Vector3 position)
     {
         rb.linearVelocity = Vector3.zero;
-        rb.position = position;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true;
 
-        transform.position = position;
+        playerComponents.NetworkTransform.SetState(position, teleportDisabled: false);
+
+        rb.position = position;
+        rb.isKinematic = false;
     }
 
     private void OnDrawGizmos()

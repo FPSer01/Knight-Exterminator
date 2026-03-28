@@ -46,7 +46,6 @@ public class EnemyHealthUI : NetworkBehaviour
 
     public void UpdateHealthBar(float newValue, bool showHealthBar = true, bool updateDamageBarInstantly = false)
     {
-        // 
         if (UIHideCoroutine != null)
         {
             StopCoroutine(UIHideCoroutine);
@@ -73,7 +72,7 @@ public class EnemyHealthUI : NetworkBehaviour
         }
 
         // Показать/убрать UI здоровья
-        if (showHealthBar)
+        if (showHealthBar && enabled)
         {
             UIHideCoroutine = StartCoroutine(HideHealthUI(timeToHide));
         } 
@@ -129,7 +128,7 @@ public class EnemyHealthUI : NetworkBehaviour
         {
             damageNumbers.text = "";
         }
-        else
+        else if (enabled)
         {
             damageNumbers.text = $"- {storedDamage}";
             ClearDamageTextCoroutine = StartCoroutine(ClearDamageUI(timeToHide / 2));

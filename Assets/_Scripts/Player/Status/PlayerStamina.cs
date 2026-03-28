@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class PlayerStamina : NetworkBehaviour
     [Header("Stamina")]
     [SerializeField] private float maxStamina;
     [SerializeField] private float currentStamina;
+    [SerializeField] private StaminaConsumage consumage;
     [Space]
     [SerializeField] private float staminaRecoveryDelay;
     [SerializeField] private float staminaTimeRecovery;
@@ -17,19 +19,32 @@ public class PlayerStamina : NetworkBehaviour
     [SerializeField] private ParticleSystem infiniteStaminaVFX;
     [SerializeField] private ParticleSystem infiniteStaminaBurstVFX;
 
-    [Header("Components")]
-    [SerializeField] private PlayerComponents playerComponents;
-    private PlayerMovement playerMovement => playerComponents.Movement;
-    private PlayerStateUI playerStateUI => playerComponents.UI.PlayerStateUI;
-
-    public float CurrentStamina { get => currentStamina; set => currentStamina = value; }
-    public float MaxStamina { get => maxStamina; set => ChangeMaxStamina(value); }
-
     private bool staminaConsumingContinuously = false;
     private IEnumerator recoverStaminaCor;
     private IEnumerator continuouslyStaminaCor;
 
     private bool blockStaminaConsumage;
+
+    #region Components
+
+    [Header("Components")]
+    [SerializeField] private PlayerComponents playerComponents;
+    private PlayerMovement playerMovement => playerComponents.Movement;
+    private PlayerStateUI playerStateUI => playerComponents.UI.PlayerStateUI;
+
+    #endregion
+
+    #region Public Interface
+
+    public float CurrentStamina { get => currentStamina; set => currentStamina = value; }
+    public float MaxStamina { get => maxStamina; set => ChangeMaxStamina(value); }
+
+    public float SprintConsumage => consumage.Sprint;
+    public float JumpConsumage => consumage.Jump;
+    public float DodgeConsumage => consumage.Dodge;
+    public float AttackConsumage => consumage.Attack;
+
+    #endregion
 
     private void Start()
     {
@@ -161,7 +176,7 @@ public class PlayerStamina : NetworkBehaviour
         {
             if (playerMovement.Sprinting)
             {
-                ConsumeStaminaContinuously(true, StaminaConsumage.SPRINT);
+                ConsumeStaminaContinuously(true, SprintConsumage);
             }
 
             EnableInfiniteStaminaVFX(false);
@@ -217,10 +232,16 @@ public class PlayerStamina : NetworkBehaviour
     }
 }
 
+[Serializable]
 public class StaminaConsumage
 {
-    public const float SPRINT = 1.5f;
-    public const float JUMP = 4.5f;
-    public const float DODGE = 6f;
-    public const float ATTACK = 3.5f;
+    [SerializeField] private float sprint = 1.5f;
+    [SerializeField] private float jump = 4.5f;
+    [SerializeField] private float dodge = 6f;
+    [SerializeField] private float attack = 3.5f;
+
+    public float Sprint { get => sprint; }
+    public float Jump { get => jump; }
+    public float Dodge { get => dodge; }
+    public float Attack { get => attack; }
 }
