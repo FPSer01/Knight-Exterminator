@@ -19,6 +19,11 @@ public class MenuMultiplayerGameWindow : MainMenuWindow
     [SerializeField] private UIButton joinButton;
     [SerializeField] private UIButton exitButton;
 
+    [Header("Help")]
+    [SerializeField] private CanvasGroup helpWindowCanvas;
+    [SerializeField] private UIButton openHelpCutton;
+    [SerializeField] private UIButton closeHelpCutton;
+
     private void Start()
     {
         hostButton.onClick.AddListener(Host);
@@ -29,6 +34,11 @@ public class MenuMultiplayerGameWindow : MainMenuWindow
         hostPortInput.onEndEdit.AddListener(SaveHostPort);
         joinIpInput.onEndEdit.AddListener(SaveJoinIp);
         joinPortInput.onEndEdit.AddListener(SaveJoinPort);
+
+        openHelpCutton.onClick.AddListener(() => SetHelpWindowActive(true));
+        closeHelpCutton.onClick.AddListener(() => SetHelpWindowActive(false));
+
+        SetHelpWindowActive(false);
     }
 
     #region Save and Load Data
@@ -136,5 +146,11 @@ public class MenuMultiplayerGameWindow : MainMenuWindow
         }
 
         base.SetWindowActive(active, timeToSwitch);
+    }
+
+    public void SetHelpWindowActive(bool active)
+    {
+        helpWindowCanvas.alpha = active ? 1 : 0;
+        helpWindowCanvas.blocksRaycasts = active;
     }
 }
