@@ -4,7 +4,7 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class AntAttack : EnemyAttack
+public class AntAttack : EnemyAttack_Old
 {
     [Header("Melee")]
     [SerializeField] private EnemyMeleeAttackCollider attackCollider;

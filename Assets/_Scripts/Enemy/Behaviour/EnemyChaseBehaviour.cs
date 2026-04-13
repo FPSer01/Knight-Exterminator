@@ -22,7 +22,6 @@ public class EnemyChaseBehaviour : BaseEnemyBehaviour
     [Header("Components")]
     [SerializeField] private EnemyComponents enemyComponents;
 
-    private EnemyHealth enemyHealth => enemyComponents.Health as EnemyHealth;
     private EnemyMeleeAttack enemyAttack => enemyComponents.Attack as EnemyMeleeAttack;
     private Animator animator => enemyComponents.Animator;
     private EnemySFXController sfxController => enemyComponents.SFXController;

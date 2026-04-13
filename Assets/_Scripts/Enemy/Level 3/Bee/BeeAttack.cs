@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class BeeAttack : EnemyAttack
+public class BeeAttack : EnemyAttack_Old
 {
     [SerializeField] private EnemyMeleeAttackCollider attackCollider;
     [SerializeField] private EnemySFXController sfxController;

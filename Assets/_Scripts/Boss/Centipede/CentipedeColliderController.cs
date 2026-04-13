@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class CentipedeColliderController : MonoBehaviour
@@ -15,7 +16,7 @@ public class CentipedeColliderController : MonoBehaviour
     {
         if (colliders.Count != bones.Count)
         {
-            Debug.LogError("Íåâåðíîå êîëè÷åñòâî êîñòåé è êîëëàéäåðîâ äëÿ êîíòðîëÿ", this);
+            Debug.LogError("ÐÐµÐ²ÐµÑ€Ð½Ð¾Ðµ ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ ÐºÐ¾ÑÑ‚ÐµÐ¹ Ð¸ ÐºÐ¾Ð»Ð»Ð°Ð¹Ð´ÐµÑ€Ð¾Ð² Ð´Ð»Ñ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ñ", this);
             return;
         }
 
@@ -25,7 +26,8 @@ public class CentipedeColliderController : MonoBehaviour
         }
     }
 
-    public void SetColliders(bool active)
+    [Rpc(SendTo.Everyone)]
+    public void SetColliders_EveryoneRpc(bool active)
     {
         colliders.ForEach(col => col.enabled = active);
     }

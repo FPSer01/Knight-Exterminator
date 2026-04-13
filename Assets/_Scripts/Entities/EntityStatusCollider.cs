@@ -1,9 +1,10 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using System;
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
-public class EntityStatusCollider : MonoBehaviour
+public class EntityStatusCollider : NetworkBehaviour
 {
     [Header("General")]
     [SerializeField] private Collider col;
@@ -21,11 +22,17 @@ public class EntityStatusCollider : MonoBehaviour
     [SerializeField] private float inTime;
     [SerializeField] private float outTime;
 
+    [Header("Movement")]
+    [SerializeField] private bool useMovement;
+    [SerializeField] private Vector3 moveDirection;
+    [SerializeField] private float moveDistance;
+    [SerializeField] private float moveTime;
+
     public event Action<PlayerHealth, HitTransform> OnHit;
 
     private Coroutine cycleCoroutine;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         col.isTrigger = true;
         OnHit += EntityStatusCollider_OnHit;
@@ -36,9 +43,15 @@ public class EntityStatusCollider : MonoBehaviour
             transform.DOScale(originalScale, inTime);
         }
 
+        if (useMovement)
+        {
+            Vector3 endPos = transform.position + moveDirection.normalized * moveDistance;
+            transform.DOMove(endPos, moveTime);
+        }
+
         cycleCoroutine = StartCoroutine(StartCycle());
 
-        if (destroy)
+        if (destroy && IsServer)
             Invoke(nameof(DestroySequence), destroyDelay);
     }
 
@@ -76,7 +89,7 @@ public class EntityStatusCollider : MonoBehaviour
         StopCoroutine(cycleCoroutine);
         transform.DOScale(Vector3.zero, outTime).OnComplete(() => 
         {
-            Destroy(gameObject);
+            NetworkObject.Despawn();
         });
     }
 }

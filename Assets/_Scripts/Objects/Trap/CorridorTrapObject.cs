@@ -1,9 +1,10 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class CorridorTrapObject : MonoBehaviour
+public class CorridorTrapObject : NetworkBehaviour
 {
     [SerializeField] private List<TrapAttackCollider> attackColliders;
     [SerializeField] private AttackDamageType damage;
@@ -22,7 +23,7 @@ public class CorridorTrapObject : MonoBehaviour
     [SerializeField] private float cooldownTime;
     private bool canTrigger = true;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         leftSpikes.ForEach(spike => spike.transform.localPosition = leftStartPos);
         rightSpikes.ForEach(spike => spike.transform.localPosition = rightStartPos);
@@ -40,8 +41,20 @@ public class CorridorTrapObject : MonoBehaviour
     {
         if (other.TryGetComponent(out PlayerMovement player) && canTrigger)
         {
-            StartCoroutine(TrapSequence());
+            ActivateTrap_ServerRpc();
         }
+    }
+
+    [Rpc(SendTo.Server)]
+    private void ActivateTrap_ServerRpc()
+    {
+        ActivateTrap_EveryoneRpc();
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void ActivateTrap_EveryoneRpc()
+    {
+        StartCoroutine(TrapSequence());
     }
 
     private IEnumerator TrapSequence()

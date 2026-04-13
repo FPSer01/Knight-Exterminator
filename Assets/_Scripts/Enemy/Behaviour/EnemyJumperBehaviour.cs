@@ -76,7 +76,7 @@ public class EnemyJumperBehaviour : BaseEnemyBehaviour
         }
 
         // Отступление
-        if (canFlee && IsNearCurrentTarget(fleeTriggerDistance))
+        if (canFlee && IsNearCurrentTarget(fleeTriggerDistance) && !enemyAttack.CanAttack)
         {
             SwitchState(Flee, ref state);
         }

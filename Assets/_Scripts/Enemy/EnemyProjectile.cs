@@ -26,8 +26,6 @@ public class EnemyProjectile : NetworkBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //Debug.Log($"Collision with: {collision.gameObject.name}");
-
         if (collision.collider.TryGetComponent(out PlayerHealth player))
         {
             Vector3 hitPos = projectileCollider.ClosestPoint(player.transform.position);

@@ -25,22 +25,9 @@ MonoBehaviour:
   canBeSold: 1
   buyCost: 300
   sellCost: 150
+  mainDamage: 12
   flatDamage:
-    Physical: 12
-    Fire: 0
-    Electrical: 0
-    StatusData:
-      Poison: 0
-      PoisonWearOffTime: 0
-      Bloodloss: 0
-      BloodlossWearOffTime: 0
-      SlownessAmount: 0
-      SlownessIntensity: 0
-      SlownessWearOffTime: 0
-      StunAmount: 0
-      StunWearOffTime: 0
-  elementPercentDamageFromPhysical: 0
-  percentDamage:
+    MainType: 0
     Physical: 0
     Fire: 0
     Electrical: 0
@@ -54,6 +41,27 @@ MonoBehaviour:
       SlownessWearOffTime: 0
       StunAmount: 0
       StunWearOffTime: 0
+    IgnoreDefence: 0
+    DisableHurtEffect: 0
+  mainDamageMult: 0
+  elementPercentDamageFromPhysical: 0
+  percentDamage:
+    MainType: 0
+    Physical: 0
+    Fire: 0
+    Electrical: 0
+    StatusData:
+      Poison: 0
+      PoisonWearOffTime: 0
+      Bloodloss: 0
+      BloodlossWearOffTime: 0
+      SlownessAmount: 0
+      SlownessIntensity: 0
+      SlownessWearOffTime: 0
+      StunAmount: 0
+      StunWearOffTime: 0
+    IgnoreDefence: 0
+    DisableHurtEffect: 0
   flatHealth: 0
   percentHealth: 0
   resist:

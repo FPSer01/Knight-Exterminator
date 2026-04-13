@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 [Serializable]
@@ -33,6 +33,7 @@ public class MovementSettings
     public float DodgeTime;
     public float DodgeDistance;
     public float DodgeCooldownTime;
+    public bool EnableDodge4Way;
 
     public float Acceleration
     {

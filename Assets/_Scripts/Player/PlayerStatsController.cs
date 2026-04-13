@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerStatsController : MonoBehaviour
+public class PlayerStatsController : NetworkBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float originalMoveSpeed;
@@ -24,7 +27,7 @@ public class PlayerStatsController : MonoBehaviour
 
     [Header("Stance")]
     [SerializeField] private Stance originalStanceData;
-    private float originalThrustAttackMult;
+    private float originalStanceDamageMult;
 
     [Header("Components")]
     [SerializeField] private PlayerComponents playerComponents;
@@ -32,7 +35,7 @@ public class PlayerStatsController : MonoBehaviour
     private PlayerHealth playerHealth => playerComponents.Health;
     private PlayerStamina playerStamina => playerComponents.Stamina;
     private PlayerAttackBase playerAttack => playerComponents.Attack;
-    private PlayerStance playerStance => playerComponents.Stance;
+    private PlayerStanceBase playerStance => playerComponents.Stance;
     private PlayerInventory playerInventory => playerComponents.Inventory;
 
     public float BaseHealth { get => currentBaseMaxHealth; }
@@ -42,11 +45,20 @@ public class PlayerStatsController : MonoBehaviour
 
     public event Action OnStatsUpdated;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
-        SetOriginalValues();
+        if (!IsOwner)
+            return;
 
         playerInventory.OnUpgradesChange += PlayerInventory_OnUpgradesChange;
+        StartCoroutine(AwaitForInitialization());
+    }
+
+    private IEnumerator AwaitForInitialization()
+    {
+        yield return new WaitUntil(() => playerAttack.IsInitialized && playerStance.IsInitialized);
+
+        SetOriginalValues();
     }
 
     private void PlayerInventory_OnUpgradesChange()
@@ -88,7 +100,7 @@ public class PlayerStatsController : MonoBehaviour
         currentBaseDamage = originalDamage;
 
         originalStanceData = playerStance.CurrentStance;
-        originalThrustAttackMult = playerStance.ThrustAttackMult;
+        originalStanceDamageMult = playerStance.StanceDamageMult;
     }
 
     /// <summary>
@@ -100,9 +112,9 @@ public class PlayerStatsController : MonoBehaviour
         ClearAllSpecialEffects();
 
         // Урон
-        currentBaseDamage.Physical = GetUpgradedAttack(level);
+        currentBaseDamage.MainDamage = GetUpgradedAttack(level);
         var attackDamage = playerAttack.AttackDamage;
-        attackDamage.Physical = currentBaseDamage.Physical;
+        attackDamage.MainDamage = currentBaseDamage.MainDamage;
         playerAttack.AttackDamage = attackDamage;
 
         // Защита
@@ -130,7 +142,7 @@ public class PlayerStatsController : MonoBehaviour
         playerHealth.MaxHealth = currentBaseMaxHealth;
         playerStamina.MaxStamina = currentBaseMaxStamina;
         playerStance.CurrentStance = originalStanceData;
-        playerStance.ThrustAttackMult = originalThrustAttackMult;
+        playerStance.StanceDamageMult = originalStanceDamageMult;
 
         ClearAllSpecialEffects();
     }
@@ -158,7 +170,7 @@ public class PlayerStatsController : MonoBehaviour
 
     public float GetUpgradedAttack(int level)
     {
-        float attack = GetUpgradedStats(level, originalDamage.Physical, playerStance.CurrentStance.DamageGainPerLevel);
+        float attack = GetUpgradedStats(level, originalDamage.MainDamage, playerStance.CurrentStance.DamageGainPerLevel);
 
         return attack;
     }
@@ -171,6 +183,22 @@ public class PlayerStatsController : MonoBehaviour
     }
 
     private void ApplyUpgradeEffect(UpgradeItem item)
+    {
+        if (item == null)
+            return;
+
+        // Статус игрока
+        SetStatusUpgradeEffect(item);
+        // Статы атаки игрока
+        SetAttackUpgradeEffect(item);
+        // Статы стойки
+        SetStanceUpgradeEffect(item);
+
+        // Различные эффекты
+        SetSpecialEffect(item);
+    }
+
+    private void SetStatusUpgradeEffect(UpgradeItem item)
     {
         if (item == null)
             return;
@@ -190,39 +218,51 @@ public class PlayerStatsController : MonoBehaviour
         // Стамина
         playerStamina.MaxStamina += item.FlatStamina;
         playerStamina.MaxStamina += currentBaseMaxStamina * item.PercentStamina;
+    }
 
-        // Физическая атака (базовая)
+    private void SetAttackUpgradeEffect(UpgradeItem item)
+    {
+        if (item == null)
+            return;
+
         var attackDamage = playerAttack.AttackDamage;
 
+        // Основной тип атаки
+        attackDamage.MainDamage += item.MainDamage;
+        attackDamage.MainDamage += currentBaseDamage.MainDamage * item.MainDamageMult;
+
+        // Физическая атака
         attackDamage.Physical += item.FlatDamage.Physical;
         attackDamage.Physical += currentBaseDamage.Physical * item.PercentDamage.Physical;
 
-        // Элементальная атака
-        if (item.ElementPercentDamageFromPhysical)
-        {
-            attackDamage.Fire += item.FlatDamage.Fire;
-            attackDamage.Fire += currentBaseDamage.Physical * item.PercentDamage.Fire;
+        bool statusGainFromMainDamage = item.ElementPercentDamageFromPhysical;
 
-            attackDamage.Electrical += item.FlatDamage.Electrical;
-            attackDamage.Electrical += currentBaseDamage.Physical * item.PercentDamage.Electrical;
-        }
-        else
-        {
-            attackDamage.Fire += item.FlatDamage.Fire;
-            attackDamage.Fire += currentBaseDamage.Fire * item.PercentDamage.Fire;
+        // Огонь
+        attackDamage.Fire += item.FlatDamage.Fire;
+        attackDamage.Fire += statusGainFromMainDamage ? 
+            currentBaseDamage.MainDamage * item.PercentDamage.Fire 
+            : currentBaseDamage.Fire * item.PercentDamage.Fire;
 
-            attackDamage.Electrical += item.FlatDamage.Electrical;
-            attackDamage.Electrical += currentBaseDamage.Electrical * item.PercentDamage.Electrical;
-        }
+        // Электричество
+        attackDamage.Electrical += item.FlatDamage.Electrical;
+        attackDamage.Electrical += statusGainFromMainDamage ?
+            currentBaseDamage.MainDamage * item.PercentDamage.Electrical
+            : currentBaseDamage.Electrical * item.PercentDamage.Electrical;
 
         // Статус-эффекты атаки
         attackDamage.StatusData += item.FlatDamage.StatusData;
         attackDamage.StatusData += currentBaseDamage.StatusData * item.PercentDamage.StatusData;
 
         playerAttack.AttackDamage = attackDamage;
+    }
+
+    private void SetStanceUpgradeEffect(UpgradeItem item)
+    {
+        if (item == null)
+            return;
 
         // Урон стойки
-        playerStance.ThrustAttackMult = originalThrustAttackMult + item.PercentStanceDamage;
+        playerStance.StanceDamageMult = originalStanceDamageMult + item.PercentStanceDamage;
 
         // Перезарядка стойки
         var stance = playerStance.CurrentStance;
@@ -235,9 +275,6 @@ public class PlayerStatsController : MonoBehaviour
         stance.Duration += originalStanceData.Duration * item.PercentStanceDuration;
 
         playerStance.CurrentStance = stance;
-
-        // Различные эффекты
-        SetSpecialEffect(item);
     }
 
     private void SetSpecialEffect(UpgradeItem item)

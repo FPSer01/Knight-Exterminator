@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Animations.Rigging;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 
@@ -13,11 +12,6 @@ using Unity.Netcode.Components;
 /// </summary>
 public class PlayerMovement : NetworkBehaviour
 {
-    // Нужное
-    private Vector2 moveInput;
-    private Vector3 moveDir;
-    private Vector3 planeMoveDir;
-
     [Header("General")]
     [SerializeField] private Transform cameraDirection;
 
@@ -49,6 +43,12 @@ public class PlayerMovement : NetworkBehaviour
     [Header("Other")]
     [SerializeField] private LayerMask dodgeExcludeMask;
 
+    #region Private Fields
+
+    private Vector2 moveInput;
+    private Vector3 moveDir;
+    private Vector3 planeMoveDir;
+
     private Coroutine fallThresholdCoroutine;
 
     private RaycastHit slopeHit;
@@ -61,6 +61,9 @@ public class PlayerMovement : NetworkBehaviour
     private bool blockTurn = false;
     private bool blockDodging = false;
 
+    #endregion
+
+    #region Public Fields
     public bool Dodging { get => movementInfo.Dodging; }
     public bool Sprinting { get => movementInfo.Sprinting; }
     public bool OnGround { get => movementInfo.OnGround; }
@@ -70,6 +73,8 @@ public class PlayerMovement : NetworkBehaviour
     public float OverallMoveSpeedMult { get => movementSettings.OverallMoveSpeedMult; set => ChangeOverallMoveSpeedMult(value); }
 
     public bool Thrusting = false;
+
+    #endregion
 
     public override void OnNetworkSpawn()
     {
@@ -178,7 +183,7 @@ public class PlayerMovement : NetworkBehaviour
         }
     }
 
-    // Перекат
+    // Уклонение
     public void DodgeInput(InputAction.CallbackContext context)
     {
         if (movementInfo.Dodging || movementInfo.DodgeCooldown || blockMovement || blockDodging)
@@ -230,14 +235,14 @@ public class PlayerMovement : NetworkBehaviour
         if (Thrusting || blockTurn)
             return;
 
-        if (!targetLockController.LockedOn && !movementInfo.Dodging)
-            rb.rotation = Quaternion.Slerp(rb.rotation, Quaternion.LookRotation(planeMoveDir, Vector3.up), movementSettings.TurnSpeed * Time.deltaTime);
-        else if (targetLockController.LockedOn)
+        if (targetLockController.LockedOn)
         {
-            if (movementInfo.Dodging)
-            {
+            // Уворот с таргет локом
+            if (movementInfo.Dodging && !movementSettings.EnableDodge4Way)
+            { 
                 rb.rotation = Quaternion.LookRotation(planeMoveDir, Vector3.up);
             }
+            // Ходьба + бег с таргет локом (поворот в сторону цели)
             else
             {
                 rb.rotation = Quaternion.Slerp(
@@ -246,6 +251,11 @@ public class PlayerMovement : NetworkBehaviour
                     movementSettings.TurnSpeed * Time.deltaTime
                     );
             }
+        }
+        // Ходьба + бег без таргет лока
+        else if (!movementInfo.Dodging)
+        {
+            rb.rotation = Quaternion.Slerp(rb.rotation, Quaternion.LookRotation(planeMoveDir, Vector3.up), movementSettings.TurnSpeed * Time.deltaTime);
         }
     }
 
@@ -487,11 +497,16 @@ public class PlayerMovement : NetworkBehaviour
         playerComponents.ActivateRig(false);
         BlockTurn(true);
 
-        float speed = movementSettings.DodgeDistance / movementSettings.DodgeTime;
+        if (movementSettings.EnableDodge4Way)
+            rb.DORotate(Quaternion.LookRotation(Vector3.ProjectOnPlane(cameraController.PivotForward, Vector3.up)).eulerAngles, 0.1f);
 
+        float speed = movementSettings.DodgeDistance / movementSettings.DodgeTime;
         rb.linearVelocity = moveDir * speed;
 
         yield return new WaitForSeconds(movementSettings.DodgeTime);
+
+        if (movementSettings.EnableDodge4Way)
+            rb.DOKill();
 
         movementInfo.Dodging = false;
         animator.SetBool("Dodge", movementInfo.Dodging);
@@ -741,6 +756,8 @@ public class PlayerMovement : NetworkBehaviour
 
         rb.position = position;
         rb.isKinematic = false;
+
+        playerComponents.ResetCloths();
     }
 
     private void OnDrawGizmos()

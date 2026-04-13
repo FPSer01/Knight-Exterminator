@@ -20,6 +20,8 @@ public class PlayerAttackMelee : PlayerAttackBase
         base.OnNetworkSpawn();
 
         SubscribeToAttackColliders(true);
+
+        IsInitialized = true;
     }
 
     public override void OnNetworkDespawn()

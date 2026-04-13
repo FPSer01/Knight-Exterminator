@@ -123,6 +123,7 @@ public class EntityStatusController : NetworkBehaviour
         if (status.CurrentValue > 0 && !status.ShowOnlyOnInflict)
             SetStatusObjectActive(status, true, false);
 
+        // Активация возобновляемого статуса
         if (status.CurrentValue >= maxValueToTriggerStatus)
         {
             if (status.Active == false && statusWarning != null && !string.IsNullOrEmpty(status.Warning))

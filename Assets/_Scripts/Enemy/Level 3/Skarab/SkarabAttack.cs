@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class SkarabAttack : EnemyAttack
+public class SkarabAttack : EnemyAttack_Old
 {
     [SerializeField] private EnemyMeleeAttackCollider attackCollider;
     [SerializeField] private EnemySFXController sfxController;

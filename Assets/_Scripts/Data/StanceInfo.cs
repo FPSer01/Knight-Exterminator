@@ -12,7 +12,7 @@ public class StanceInfo : ScriptableObject
     [SerializeField] private string stanceDescription;
     [SerializeField] private Sprite stanceIcon;
 
-    [Header("Settings")]
+    [Header("General Settings")]
     [SerializeField] private StanceType type;
     [SerializeField] private int reviveCount;
     [Space]
@@ -27,7 +27,7 @@ public class StanceInfo : ScriptableObject
 
     public string StanceName { get => stanceName; }
     public string Description { get => GetFullDescription(); }
-    public string FullDescription { get => GetFullDescription() + "\n" + GetReviveDescription(); }
+    public string FullDescription { get => GetFullDescription() + "\n\n" + GetReviveDescription(); }
     public Sprite StanceIcon { get => stanceIcon;  }
     public StanceType Type { get => type; }
 
@@ -114,12 +114,16 @@ public class StanceInfo : ScriptableObject
 
     public string GetReviveDescription()
     {
-        return $"\n\nВозрождений на этаж: <style=\"Buff\">{reviveCount}</style>";
+        return $"Возрождений на этаж: <style=\"Buff\">{reviveCount}</style>";
     }
 }
+
 [Serializable]
 public struct Stance
 {
+    /// <summary>
+    /// Глобальный индекс стойки (int от enum StanceType)
+    /// </summary>
     public readonly int Index { get => (int)Type; }
 
     public StanceType Type;

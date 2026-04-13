@@ -380,7 +380,7 @@ Transform:
   m_GameObject: {fileID: 5028844872594256697}
   serializedVersion: 2
   m_LocalRotation: {x: 0.70710677, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 8.898, z: 0}
+  m_LocalPosition: {x: 0, y: 7.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -981,13 +981,6 @@ MonoBehaviour:
   - {fileID: 1087640965767474695}
   - {fileID: 2814887162811753187}
   - {fileID: 3507064322350851645}
-  roomStructureSettings:
-    WallPrefab: {fileID: 0}
-    DoorWallPrefab: {fileID: 0}
-    FloorPrefab: {fileID: 0}
-    CeilingPrefab: {fileID: 0}
-  floor: {fileID: 0}
-  ceiling: {fileID: 0}
   wallTop: {fileID: 7985933350161287217}
   wallBottom: {fileID: 8035009233114210907}
   wallRight: {fileID: 2900406205823747293}
@@ -996,13 +989,7 @@ MonoBehaviour:
   doorWallBottom: {fileID: 1684528791566794615}
   doorWallRight: {fileID: 6006099220026088463}
   doorWallLeft: {fileID: 1485905859970400826}
-  topDirection: {x: 0, y: 0, z: 1}
-  rightDirection: {x: 1, y: 0, z: 0}
-  UseCustomRoomSize: 1
   customRoomSize: {x: 33.5, y: 10, z: 33.5}
-  UseCustomWallSettings: 0
-  customWallOffset: {x: 0, y: 0, z: 0}
-  customDoorWallOffset: {x: 0, y: 0, z: 0}
   triggerCollider: {fileID: 644525193436686131}
   triggerSize: 0.925
   simpleDoors: 0
@@ -1028,7 +1015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db8860a7e8cfef4aa830354ab8e4951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnSettings: {fileID: 11400000, guid: 046fa282e081f3542b206397a0f8848c, type: 2}
+  level: 3
   enemiesAmount: 5
   spawnPoints:
   - {fileID: 1827509509504252261}

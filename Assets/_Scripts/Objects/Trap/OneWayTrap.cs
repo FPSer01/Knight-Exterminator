@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class OneWayTrap : MonoBehaviour
+public class OneWayTrap : NetworkBehaviour
 {
     [SerializeField] private List<TrapAttackCollider> attackColliders;
     [SerializeField] private AttackDamageType damage;
@@ -18,10 +19,9 @@ public class OneWayTrap : MonoBehaviour
     [SerializeField] private float cooldownTime;
     private bool canTrigger = true;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         spikes.ForEach(spike => spike.transform.localPosition = startPos);
-
         attackColliders.ForEach(c => c.OnHit += AttackCollider_OnHit);
     }
 
@@ -35,8 +35,20 @@ public class OneWayTrap : MonoBehaviour
     {
         if (other.TryGetComponent(out PlayerMovement player) && canTrigger)
         {
-            StartCoroutine(TrapSequence());
+            ActivateTrap_ServerRpc();
         }
+    }
+
+    [Rpc(SendTo.Server)]
+    private void ActivateTrap_ServerRpc()
+    {
+        ActivateTrap_EveryoneRpc();
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void ActivateTrap_EveryoneRpc()
+    {
+        StartCoroutine(TrapSequence());
     }
 
     private IEnumerator TrapSequence()

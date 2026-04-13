@@ -96,7 +96,6 @@ public class BossHealth : EntityHealth, ICameraLockable
         if (!enabled)
             return;
 
-        enemyCollider.enabled = false;
         sfxController.PlayDeathSFX(deathSFXVolume);
 
         RequestEnemyDespawn_ServerRpc(Time.fixedDeltaTime);
@@ -119,7 +118,12 @@ public class BossHealth : EntityHealth, ICameraLockable
 
     private void ExecuteCreateHitEffect(HitTransform hitTransform)
     {
-        Vector3 newPosition = enemyCollider.ClosestPoint(hitTransform.Position);
+        Vector3 newPosition = transform.position;
+
+        if (enemyCollider != null)
+        {
+            newPosition = enemyCollider.ClosestPoint(hitTransform.Position);
+        }
 
         GameObject hitEffect = Instantiate(hitEffectPrefab, newPosition, hitTransform.Rotation);
         hitEffect.transform.localScale = hitEffectScale;

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "UpgradeItem", menuName = "Data/Upgrade Item")]
 public class UpgradeItem : ScriptableObject
@@ -26,8 +26,14 @@ public class UpgradeItem : ScriptableObject
 
     [Space(20f)]
     [Header("Attack")]
+    [Tooltip("Изменение предметом Main Damage игрока")]
+    [SerializeField] private float mainDamage;
+    [Tooltip("Изменение предметом отдельные типы урона игрока (сложение)")]
     [SerializeField] private AttackDamageType flatDamage;
+    [Space(20f)]
+    [SerializeField] private float mainDamageMult;
     [SerializeField] private bool elementPercentDamageFromPhysical;
+    [Tooltip("Изменение предметом отдельные типы урона игрока (1 + умножение)")]
     [SerializeField] private AttackDamageType percentDamage;
 
     [Space(20f)]
@@ -52,7 +58,7 @@ public class UpgradeItem : ScriptableObject
 
     [Space(20f)]
     [Header("Special")]
-    [SerializeField] private ItemSpe�ialEffect specialEffect;
+    [SerializeField] private ItemSpeсialEffect specialEffect;
     [SerializeField] private float vampirismHealPercent;
 
     public string ItemName { get => itemName; }
@@ -78,7 +84,7 @@ public class UpgradeItem : ScriptableObject
     public float FlatStamina { get => flatStamina; }
     public float PercentStamina { get => percentStamina; }
 
-    public ItemSpe�ialEffect SpecialEffect { get => specialEffect; }
+    public ItemSpeсialEffect SpecialEffect { get => specialEffect; }
     public bool ElementPercentDamageFromPhysical { get => elementPercentDamageFromPhysical; }
 
     public float PercentStanceDamage { get => percentStanceDamage; }
@@ -87,22 +93,24 @@ public class UpgradeItem : ScriptableObject
     public float FlatStanceDuration { get => flatStanceDuration; }
     public float PercentStanceDuration { get => percentStanceDuration; }
     public float VampirismHealPercent { get => vampirismHealPercent; }
+    public float MainDamage { get => mainDamage; }
+    public float MainDamageMult { get => mainDamageMult; }
 
     public string GetRarityName()
     {
         switch (rarity)
         {
             case ItemRarity.Common:
-                return "�������";
+                return "Обычная";
 
             case ItemRarity.Rare:
-                return "������";
+                return "Редкая";
 
             case ItemRarity.Mythical:
-                return "����������";
+                return "Мифическая";
 
             case ItemRarity.Boss:
-                return "������";
+                return "Особое";
 
             default: return null;
         }
@@ -113,16 +121,16 @@ public class UpgradeItem : ScriptableObject
         switch (type)
         {
             case ItemType.Attack:
-                return "�������� �����";
+                return "Усиление атаки";
 
             case ItemType.General:
-                return "����� ��������";
+                return "Общее усиление";
 
             case ItemType.Stance:
-                return "�������� ������";
+                return "Усиление стойки";
 
             case ItemType.All:
-                return "������������� ��������";
+                return "Универсальное усиление";
 
             default: return null;
         }

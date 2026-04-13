@@ -35,6 +35,8 @@ public class SpiderBossBehaviour : BaseEnemyBehaviour
         public float SummonPoisonSpidersCooldown;
     }
 
+    private readonly static string DEBUG = $"[{LogTags.BLUE_COLOR}Spider Behaviour{LogTags.END_COLOR}]";
+
     [Header("Spider Boss Behaviour: General")]
     [SerializeField] private float rotateSpeed;
 
@@ -89,7 +91,7 @@ public class SpiderBossBehaviour : BaseEnemyBehaviour
         var phase = phaseSettings.Find(p => p.Index == currentPhaseIndex);
         SetPhaseStats(phase);
 
-        Debug.Log($"<color=#FF0000>[Phase] Change to Index {currentPhaseIndex}, Phase {currentPhaseIndex + 1}</color>");
+        Debug.Log($"{DEBUG} {LogTags.RED_COLOR}[Phase] Change to Index {currentPhaseIndex}, Phase {currentPhaseIndex + 1}{LogTags.END_COLOR}");
     }
 
     protected override void OnSpawned()
@@ -175,9 +177,10 @@ public class SpiderBossBehaviour : BaseEnemyBehaviour
     {
         if (DoOnce())
         {
-            Debug.Log("[Phase 1] Spider Move State");
             animator.SetBool("Move", true);
             sfxController.PlayMoveSFX(true);
+
+            Debug.Log($"{DEBUG} [Phase 1] Move State");
         }
 
         // Проверка на ближнюю атаку
@@ -209,9 +212,9 @@ public class SpiderBossBehaviour : BaseEnemyBehaviour
     {
         if (DoOnce())
         {
-            Debug.Log("[Phase 2] Spider Move State");
             animator.SetBool("Move", false);
             sfxController.PlayMoveSFX(false);
+            Debug.Log($"{DEBUG} [Phase 2] Move State");
         }
 
         // Проверка на призыв
@@ -248,9 +251,9 @@ public class SpiderBossBehaviour : BaseEnemyBehaviour
     {
         if (DoOnce())
         {
-            Debug.Log("[Phase 3] Spider Move State");
             animator.SetBool("Move", true);
             sfxController.PlayMoveSFX(true);
+            Debug.Log($"{DEBUG} [Phase 3] Move State");
         }
 
         // Проверка на ближнюю атаку
@@ -314,13 +317,13 @@ public class SpiderBossBehaviour : BaseEnemyBehaviour
     {
         if (DoOnce())
         {
-            Debug.Log("Spider Melee Attack State");
-
             animator.SetBool("Move", false);
             sfxController.PlayMoveSFX(false);
             animator.SetTrigger("Bite");
 
             agent.enabled = false;
+
+            Debug.Log($"{DEBUG} Melee Attack State");
         }
 
         if (Wait(delayBeforeMeleeAttack))
@@ -352,13 +355,13 @@ public class SpiderBossBehaviour : BaseEnemyBehaviour
     {
         if (DoOnce())
         {
-            Debug.Log("Spider Web Throw State");
-
             animator.SetBool("Move", false);
             sfxController.PlayMoveSFX(false);
             animator.SetTrigger("Throw");
 
             agent.enabled = false;
+
+            Debug.Log($"{DEBUG} Web Throw State");
         }
 
         if (Wait(delayBeforeRangeAttack))
@@ -393,8 +396,6 @@ public class SpiderBossBehaviour : BaseEnemyBehaviour
     {
         if (DoOnce())
         {
-            Debug.Log("Spider Summon State");
-
             animator.SetBool("Move", false);
             sfxController.PlayMoveSFX(false);
             PlaySummonVFX_EveryoneRpc();
@@ -404,6 +405,8 @@ public class SpiderBossBehaviour : BaseEnemyBehaviour
             int amount = Random.Range(minSpidersSummonAmount, maxSpidersSummonAmount + 1);
 
             summonSpidersAttack.SummonAttack(amount);
+
+            Debug.Log($"{DEBUG} Summon State");
         }
 
         if (Wait(summonTime))
@@ -427,8 +430,6 @@ public class SpiderBossBehaviour : BaseEnemyBehaviour
     {
         if (DoOnce())
         {
-            Debug.Log("Spider Special Summon State");
-
             animator.SetBool("Move", false);
             sfxController.PlayMoveSFX(false);
             PlaySummonVFX_EveryoneRpc();
@@ -438,6 +439,8 @@ public class SpiderBossBehaviour : BaseEnemyBehaviour
             int amount = Random.Range(minPoisonSpidersSummonAmount, maxPoisonSpidersSummonAmount + 1);
 
             summonPoisonSpiderAttack.SummonAttack(amount);
+
+            Debug.Log($"{DEBUG} Special Summon State");
         }
 
         if (Wait(summonTime))
@@ -464,6 +467,8 @@ public class SpiderBossBehaviour : BaseEnemyBehaviour
             animator.SetBool("Move", true);
             sfxController.PlayMoveSFX(true);
             MoveFromTarget(fleeDistance);
+
+            Debug.Log($"{DEBUG} Flee State");
         }
 
         if (agent.remainingDistance <= 0.1f)

@@ -1,4 +1,6 @@
 ﻿using KE;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -28,7 +30,7 @@ public class PlayerComponents : NetworkBehaviour
     [SerializeField] private EntityStatusController statusController;
     [SerializeField] private PlayerLevelController levelController;
     [SerializeField] private PlayerInteraction playerInteraction;
-    [SerializeField] private PlayerStance playerStance;
+    [SerializeField] private PlayerStanceBase playerStance;
     [SerializeField] private PlayerStatsController statsController;
     [SerializeField] private PlayerInventory playerInventory;
     [SerializeField] private PlayerUI playerUI;
@@ -40,6 +42,9 @@ public class PlayerComponents : NetworkBehaviour
 
     [Header("Utility")]
     [SerializeField] private SpectatorTarget spectatorTarget;
+
+    [Header("Cloth")]
+    [SerializeField] private List<Cloth> cloths;
 
     #region Public
 
@@ -56,7 +61,7 @@ public class PlayerComponents : NetworkBehaviour
     public EntityStatusController StatusController { get => statusController; }
     public PlayerLevelController LevelController { get => levelController; }
     public PlayerInteraction Interaction { get => playerInteraction; }
-    public PlayerStance Stance { get => playerStance; }
+    public PlayerStanceBase Stance { get => playerStance; }
     public PlayerStatsController StatsController { get => statsController; }
     public PlayerInventory Inventory { get => playerInventory; }
     public PlayerUI UI { get => playerUI; }
@@ -137,9 +142,54 @@ public class PlayerComponents : NetworkBehaviour
             layer.active = activate;
         }
 
-        foreach (var layer in attackAimRig.layers)
+        if (attackAimRig != null)
         {
-            layer.active = activate;
+            foreach (var layer in attackAimRig.layers)
+            {
+                layer.active = activate;
+            }
+        }
+    }
+
+    #endregion
+
+    #region Cloth Utility
+
+    public void ResetCloths()
+    {
+        StartCoroutine(ClothReset());
+        ResetCloths_NotOwnerRpc();
+    }
+
+    [Rpc(SendTo.NotOwner)]
+    private void ResetCloths_NotOwnerRpc()
+    {
+        StartCoroutine(ClothReset());
+    }
+
+    private IEnumerator ClothReset()
+    {
+        if (cloths == null)
+            yield break;
+
+        foreach (var cloth in cloths)
+        {
+            if (cloth == null)
+                continue;
+
+            cloth.enabled = false;
+            cloth.ClearTransformMotion();
+        }
+
+        yield return new WaitForFixedUpdate();
+
+        foreach (var cloth in cloths)
+        {
+            if (cloth == null)
+                continue;
+
+            cloth.enabled = true;
+            cloth.ClearTransformMotion();
         }
     }
 

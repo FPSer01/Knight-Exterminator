@@ -249,6 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1a2c5889b6952e48add362a88d241fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   attackCollider: {fileID: 5841279871171703995}
   slashVFX: {fileID: 5369817909535214351}
 --- !u!135 &5841279871171703995
@@ -322,6 +323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49cb17bb7e66e42479162742521cf466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   jumpOutSpline: {fileID: 8715361534569726107}
   beforeJumpOutVFX: {fileID: 2153740830243248702}
   sfxSource: {fileID: 2697425919454261938}
@@ -393,7 +395,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 0
-  MinDistance: 0.125
+  MinDistance: 0.5
   MaxDistance: 25
   Pan2D: 0
   rolloffMode: 0

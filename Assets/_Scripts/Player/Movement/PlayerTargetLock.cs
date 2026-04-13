@@ -52,6 +52,7 @@ public class PlayerTargetLock : NetworkBehaviour
     public event Action<bool> OnLockOnTargetChange;
     public bool LockedOn { get => lockedOn; set => lockedOn = value; }
     public bool LockActive { get => lockedOn && targetNotAbscured; }
+    public Transform Target { get => lockOnTarget; }
 
     private IEnumerator switchCooldownCoroutine;
 

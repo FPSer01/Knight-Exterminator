@@ -1,8 +1,4 @@
-﻿using DG.Tweening;
-using KE;
-using System;
-using System.Collections;
-using System.Diagnostics;
+﻿using System.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
@@ -17,9 +13,8 @@ public class LoadManager : NetworkBehaviour
 
     [SerializeField] private LoadScreen loadScreen;
     [SerializeField] private ConnectionScreen connectionScreen;
-    [Space]
-    [SerializeField] private bool singleplayerDebugMode = false;
 
+    private bool EnableDebugMode => DebugManager.Instance.EnableDebugMode;
     public Slider LoadProgressBar { get => loadScreen.ProgressBar; }
 
     private bool playerShutdownAwait = false;
@@ -124,7 +119,7 @@ public class LoadManager : NetworkBehaviour
     /// </summary>
     public void StartSingleplayerGame()
     {
-        StartCoroutine(LoadSingleplayerGame(singleplayerDebugMode));
+        StartCoroutine(LoadSingleplayerGame(EnableDebugMode));
     }
 
     /// <summary>
@@ -189,7 +184,7 @@ public class LoadManager : NetworkBehaviour
 
     #region Load Coroutines
 
-    private IEnumerator LoadMultiplayerGame(bool debug = false)
+    private IEnumerator LoadMultiplayerGame(bool debugMode = false)
     {
         PlayerUI.BlockMap = false;
 
@@ -203,14 +198,18 @@ public class LoadManager : NetworkBehaviour
 
         NetworkManager.Singleton.SceneManager.OnSceneEvent += OnLoadSceneEvent;
 
-        if (debug)
+#if UNITY_EDITOR || DEBUG
+        if (debugMode)
         {
-            NetworkLoadScene(GameScenes.TEST);
+            NetworkLoadScene((int)DebugManager.Instance.MultiplayerStartLevel);
         }
         else
         {
             NetworkLoadScene(GameScenes.LEVEL_1);
         }
+#else
+        NetworkLoadScene(GameScenes.LEVEL_1);
+#endif
     }
 
     private IEnumerator StartLoadTutorial()
@@ -253,14 +252,18 @@ public class LoadManager : NetworkBehaviour
 
         NetworkManager.Singleton.SceneManager.OnSceneEvent += OnLoadSceneEvent;
 
+#if UNITY_EDITOR || DEBUG
         if (debugMode)
         {
-            NetworkLoadScene(GameScenes.TEST);
+            NetworkLoadScene((int)DebugManager.Instance.SingleplayerStartLevel);
         }
         else
         {
             NetworkLoadScene(GameScenes.LEVEL_1);
         }
+#else
+        NetworkLoadScene(GameScenes.LEVEL_1);
+#endif
     }
 
     private IEnumerator LoadMenu()
@@ -319,5 +322,5 @@ public class LoadManager : NetworkBehaviour
         }
     }
 
-    #endregion
+#endregion
 }

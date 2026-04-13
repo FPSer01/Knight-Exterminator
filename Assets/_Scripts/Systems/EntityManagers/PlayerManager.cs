@@ -9,13 +9,11 @@ public class PlayerManager : NetworkBehaviour
 
     public static PlayerManager Instance { get; private set; }
 
-    [SerializeField] private GameObject playerObjectPrefab;
+    [Header("Prefabs")]
+    [SerializeField] private GameObject knightObjectPrefab;
+    [SerializeField] private GameObject mageObjectPrefab;
     [Space]
     [SerializeField] private Vector3 playerStartPositionOffset;
-
-    [Header("Debug")]
-    [SerializeField] private bool debugMode = false;
-    [SerializeField] private StanceType startStance;
 
     private Dictionary<ulong, GameObject> spawnedPlayers = new();
 
@@ -28,7 +26,7 @@ public class PlayerManager : NetworkBehaviour
     {
         if (Instance == null)
             Instance = this;
-        else 
+        else
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
@@ -53,7 +51,6 @@ public class PlayerManager : NetworkBehaviour
     private void NetworkManager_OnClientDisconnectCallback(ulong clientId)
     {
         spawnedPlayers.Remove(clientId);
-
         OnPlayerObjectRemoved?.Invoke(clientId);
     }
 
@@ -66,6 +63,7 @@ public class PlayerManager : NetworkBehaviour
 
         Vector3 finalPosition = position + playerStartPositionOffset;
 
+        // Если уже есть объект игрока - просто телепорт
         if (spawnedPlayers.ContainsKey(clientId) && spawnedPlayers[clientId] != null)
         {
             GameObject existingPlayer = spawnedPlayers[clientId];
@@ -73,36 +71,74 @@ public class PlayerManager : NetworkBehaviour
             return;
         }
 
-        GameObject newPlayer = Instantiate(playerObjectPrefab, finalPosition, Quaternion.identity);
-
-        NetworkObject netObj = newPlayer.GetComponent<NetworkObject>();
-        netObj.DestroyWithScene = false;
-        SetupPlayer(newPlayer, clientId);
-
-        netObj.SpawnAsPlayerObject(clientId);
-        spawnedPlayers[clientId] = newPlayer;
-
-        OnPlayerObjectAdded?.Invoke(clientId, newPlayer);
-    }
-
-    #region Setup
-
-    private void SetupPlayer(GameObject playerObject, ulong clientId)
-    {
+        // Если нет - создание и настройка нового
         switch (StartGameData.GameMode)
         {
             case Gamemode.Singleplayer:
-                SetupForSingleplayer(playerObject);
+                SetupSpawnSingleplayer(clientId, position);
                 break;
 
             case Gamemode.Multiplayer:
-                SetupForMultiplayer(playerObject, clientId);
+                SetupSpawnMultiplayer(clientId, position);
                 break;
         }
     }
 
-    private void SetupForMultiplayer(GameObject playerObject, ulong clientId)
+    #region Setup
+
+    private void SetupSpawnSingleplayer(ulong clientId, Vector3 position)
     {
+        StanceType stance = StartGameData.Stance;
+        GameObject playerObject = SpawnPlayerPrefab(stance, position);
+
+        if (playerObject == null)
+        {
+            return;
+        }
+
+        NetworkObject playerNetworkObject = playerObject.GetComponent<NetworkObject>();
+        playerNetworkObject.DestroyWithScene = false;
+
+        PlayerStanceBase playerStanceController = playerObject.GetComponent<PlayerComponents>().Stance;
+
+        if (playerStanceController != null)
+        {
+            playerStanceController.ExecuteSetStance(stance);
+        }
+
+        playerNetworkObject.SpawnAsPlayerObject(clientId);
+        spawnedPlayers[clientId] = playerObject;
+
+        Debug.Log($"{DEBUG_TAG} Singleplayer Spawn Complete!");
+        OnPlayerObjectAdded?.Invoke(clientId, playerObject);
+    }
+
+    private void SetupSpawnMultiplayer(ulong clientId, Vector3 position)
+    {
+        StanceType stance = StanceType.None;
+
+        // Берем выбранную стойку (класс)
+        if (NetworkManager.ConnectedClients[clientId].PlayerObject.TryGetComponent(out PlayerNetworkObject playerStartData))
+        {
+            stance = playerStartData.Stance.Value;
+        }
+        else
+        {
+            Debug.Log($"{DEBUG_TAG} Setup Player: PlayerNetworkObject not found");
+            return;
+        }
+
+        // Спавним объект
+        GameObject playerObject = SpawnPlayerPrefab(stance, position);
+
+        if (playerObject == null)
+        {
+            return;
+        }
+
+        NetworkObject playerNetworkObject = playerObject.GetComponent<NetworkObject>();
+        playerNetworkObject.DestroyWithScene = false;
+
         if (NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out NetworkClient client))
         {
             PlayerNetworkObject playerData = null;
@@ -123,23 +159,36 @@ public class PlayerManager : NetworkBehaviour
                     break;
                 }
             }
-
-            Debug.Log($"{DEBUG_TAG} Player (id: {clientId}) Setup Complete");
         }
         else
         {
             Debug.LogError($"{DEBUG_TAG} Client (id: {clientId}) Not Found");
-        }       
+            return;
+        }
+
+        playerNetworkObject.SpawnAsPlayerObject(clientId);
+        spawnedPlayers[clientId] = playerObject;
+
+        Debug.Log($"{DEBUG_TAG} Player (id: {clientId}) Setup Complete");
+        OnPlayerObjectAdded?.Invoke(clientId, playerObject);
     }
 
-    private void SetupForSingleplayer(GameObject playerObject)
+    private GameObject SpawnPlayerPrefab(StanceType stance, Vector3 position)
     {
-        StanceType selectedStance = debugMode ? startStance : StartGameData.Stance;
-        PlayerStance playerStanceController = playerObject.GetComponentInChildren<PlayerStance>();
-
-        if (playerStanceController != null)
+        // Рыцарь
+        if ((int)stance >= 1 && (int)stance <= 4 && stance != 0)
         {
-            playerStanceController.ExecuteSetStance(selectedStance);
+            return Instantiate(knightObjectPrefab, position, Quaternion.identity);
+        }
+        // Маг
+        else if ((int)stance >= 5 && (int)stance <= 7 && stance != 0)
+        {
+            return Instantiate(mageObjectPrefab, position, Quaternion.identity);
+        }
+        else
+        {
+            Debug.Log($"{DEBUG_TAG} Setup Player: Cannot spawn Player -> StanceType not valid");
+            return null;
         }
     }
 

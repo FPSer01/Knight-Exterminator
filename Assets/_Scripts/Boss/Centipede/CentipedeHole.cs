@@ -1,9 +1,10 @@
 ﻿using DG.Tweening;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Splines;
 
-public class CentipedeHole : MonoBehaviour
+public class CentipedeHole : NetworkBehaviour
 {
     [Header("Animation")]
     [SerializeField] private SplineContainer jumpOutSpline;
@@ -34,7 +35,8 @@ public class CentipedeHole : MonoBehaviour
         player.TakeDamage(damage, null);
     }
 
-    public void PlaySFX()
+    [Rpc(SendTo.Everyone)]
+    public void PlaySFX_EveryoneRpc()
     {
         var index = Random.Range(0, interactionSFX.Count);
         var clip = interactionSFX[index];
@@ -44,12 +46,14 @@ public class CentipedeHole : MonoBehaviour
         sfxSource.Play();
     }
 
-    public void StopSFX()
+    [Rpc(SendTo.Everyone)]
+    public void StopSFX_EveryoneRpc()
     {
         sfxSource.DOFade(0, 0.25f).OnComplete(() => sfxSource.Stop());
     }
 
-    public void PlayBeforeJumpOutVFX(bool play)
+    [Rpc(SendTo.Everyone)]
+    public void PlayBeforeJumpOutVFX_EveryoneRpc(bool play)
     {
         if (play)
             beforeJumpOutVFX.Play();
@@ -62,9 +66,9 @@ public class CentipedeHole : MonoBehaviour
         attackCollider.StartAttackCheck();
     }
 
-    public void TurnSplineTowardsTransform(Transform target)
+    public void TurnSplineTowardsPoint(Vector3 point)
     {
-        if (target == null)
+        if (point == null)
             return;
 
         Vector3 direction = Vector3.zero;
@@ -72,17 +76,17 @@ public class CentipedeHole : MonoBehaviour
         if (Physics.Raycast(checkPos.position, checkPos.forward, checkDistance, checkMask))
         {
             direction = new Vector3(
-                jumpOutSpline.transform.position.x - target.position.x,
+                jumpOutSpline.transform.position.x - point.x,
                 jumpOutSpline.transform.position.y,
-                jumpOutSpline.transform.position.z - target.position.z
+                jumpOutSpline.transform.position.z - point.z
                 ).normalized;
         }
         else
         {
             direction = new Vector3(
-                target.position.x - jumpOutSpline.transform.position.x,
+                point.x - jumpOutSpline.transform.position.x,
                 jumpOutSpline.transform.position.y,
-                target.position.z - jumpOutSpline.transform.position.z
+                point.z - jumpOutSpline.transform.position.z
                 ).normalized;
         }
 

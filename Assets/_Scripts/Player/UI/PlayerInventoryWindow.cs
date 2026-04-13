@@ -1,4 +1,4 @@
-using DG.Tweening;
+п»їusing DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +9,10 @@ using UnityEngine.UI;
 
 public class PlayerInventoryWindow : PlayerUIWindow
 {
+    private const string FIRE_DAMAGE_FORMAT = "<color=#FF0D00>";
+    private const string ELECTIC_DAMAGE_FORMAT = "<color=#00B7EB>";
+    private const string END_COLOR = "</color>";
+
     [Header("Slots")]
     [SerializeField] private GameObject draggableItemPrefab;
     [SerializeField] private Transform dragContainer;
@@ -30,13 +34,15 @@ public class PlayerInventoryWindow : PlayerUIWindow
     [Header("Context Menu")]
     [SerializeField] private InventoryContextMenu contextMenu;
 
-    [Header("References")]
-    [SerializeField] private PlayerInventory playerInventory;
-    [SerializeField] private PlayerStatsController playerStats;
-    [SerializeField] private PlayerHealth playerHealth;
-    [SerializeField] private PlayerStamina playerStamina;
-    [SerializeField] private PlayerAttackMelee playerAttack;
-    [SerializeField] private PlayerStance playerStance;
+    [Header("Components")]
+    [SerializeField] private PlayerComponents components;
+
+    private PlayerInventory playerInventory => components.Inventory;
+    private PlayerStatsController playerStats => components.StatsController;
+    private PlayerHealth playerHealth => components.Health;
+    private PlayerStamina playerStamina => components.Stamina;
+    private PlayerAttackBase playerAttack => components.Attack;
+    private PlayerStanceBase playerStance => components.Stance;
 
     [Header("UI")]
     [SerializeField] private TMP_Text healthStatText;
@@ -183,46 +189,58 @@ public class PlayerInventoryWindow : PlayerUIWindow
 
     private void UpdateStatsUI()
     {
-        // Здоровье
-        SetStatText(healthStatText, "Здоровье: {0}", playerHealth.MaxHealth);
+        // Р—РґРѕСЂРѕРІСЊРµ
+        SetStatText(healthStatText, "Р—РґРѕСЂРѕРІСЊРµ: {0}", playerHealth.MaxHealth);
 
-        // Выносливость
-        SetStatText(staminaStatText, "Выносливость: {0}", playerStamina.MaxStamina);
+        // Р’С‹РЅРѕСЃР»РёРІРѕСЃС‚СЊ
+        SetStatText(staminaStatText, "Р’С‹РЅРѕСЃР»РёРІРѕСЃС‚СЊ: {0}", playerStamina.MaxStamina);
 
-        // Урон
-        if (playerAttack.AttackDamage.Fire > 0 && playerAttack.AttackDamage.Electrical > 0) // Если есть огненный и электрический урон
+        // РЈСЂРѕРЅ
+        List<float> damageValues = new();
+        string finalDamageFormat = "РЈСЂРѕРЅ: ";
+        int addedFormats = 0;
+
+        if (playerAttack.AttackDamage.Physical > 0)
         {
-            SetStatText(
-                damageStatText,
-                "Урон: {0} " +
-                "+ <color=#CD5400>{1}</color> " +
-                "+ <color=#009EBF>{2}</color>", 
-                playerAttack.AttackDamage.Physical, 
-                playerAttack.AttackDamage.Fire,
-                playerAttack.AttackDamage.Electrical
-                );
-        }
-        if (playerAttack.AttackDamage.Fire > 0) // Если есть огненный урон
-        {
-            SetStatText(damageStatText, "Урон: {0} " +
-                "+ <color=#CD5400>{1}</color>", 
-                playerAttack.AttackDamage.Physical, 
-                playerAttack.AttackDamage.Fire);
-        }
-        else if (playerAttack.AttackDamage.Electrical > 0) // Если есть электрический урон
-        {
-            SetStatText(damageStatText, "Урон: {0} " +
-                "+ <color=#009EBF>{1}</color>", 
-                playerAttack.AttackDamage.Physical, 
-                playerAttack.AttackDamage.Electrical);
-        }
-        else // Если есть только обычный урон
-        {
-            SetStatText(damageStatText, "Урон: {0}", playerAttack.AttackDamage.Physical);
+            finalDamageFormat += ManageDynamicFormat("{!INDEX}", ref addedFormats);
+            damageValues.Add(playerAttack.AttackDamage.Physical);
         }
 
-        // Защита
-        SetStatText(defenseStatText, "Защита: {0}", playerHealth.ResistData.FlatResistance);
+        if (playerAttack.AttackDamage.Fire > 0)
+        {
+            finalDamageFormat += ManageDynamicFormat($"{FIRE_DAMAGE_FORMAT}" + "{!INDEX}" + $"{END_COLOR}", ref addedFormats);
+            damageValues.Add(playerAttack.AttackDamage.Fire);
+        }
+
+        if (playerAttack.AttackDamage.Electrical > 0)
+        {
+            finalDamageFormat += ManageDynamicFormat($"{ELECTIC_DAMAGE_FORMAT}" + "{!INDEX}" + $"{END_COLOR}", ref addedFormats);
+            damageValues.Add(playerAttack.AttackDamage.Electrical);
+        }
+
+        SetStatText(damageStatText, finalDamageFormat, damageValues.ToArray());
+
+        // Р—Р°С‰РёС‚Р°
+        SetStatText(defenseStatText, "Р—Р°С‰РёС‚Р°: {0}", playerHealth.ResistData.FlatResistance);
+    }
+
+    /// <summary>
+    /// РћР±СЂР°Р±РѕС‚Р°С‚СЊ РґРёРЅР°РјРёС‡РµСЃРєРёР№ С„РѕСЂРјР°С‚. Р’СЃС‚Р°РІРёС‚СЊ !INDEX РґР»СЏ РїРѕРјРµС‚РєРё РёРЅРґРµРєСЃР°
+    /// </summary>
+    /// <param name="formatToManage"></param>
+    /// <param name="currentFormatIndex"></param>
+    /// <returns>Р“РѕС‚РѕРІС‹Р№ С„РѕСЂРјР°С‚</returns>
+    private string ManageDynamicFormat(string formatToManage, ref int currentFormatIndex)
+    {
+        if (currentFormatIndex > 0)
+        {
+            formatToManage = "|" + formatToManage;
+        }
+
+        formatToManage = formatToManage.Replace("!INDEX", currentFormatIndex.ToString());
+        currentFormatIndex++;
+
+        return formatToManage;
     }
 
     private void SetStatText(TMP_Text textObject, string format, params float[] values)

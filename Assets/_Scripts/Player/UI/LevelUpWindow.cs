@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -148,7 +148,7 @@ public class LevelUpWindow : PlayerUIWindow
     {
         healthValueText_Current.text = $"{TrimNumber(statsController.BaseHealth)}";
         staminaValueText_Current.text = $"{TrimNumber(statsController.BaseStamina)}";
-        damageValueText_Current.text = $"{TrimNumber(statsController.BaseDamage.Physical)}";
+        damageValueText_Current.text = $"{TrimNumber(statsController.BaseDamage.MainDamage)}";
         defenseValueText_Current.text = $"{TrimNumber(statsController.BaseHealthResist.FlatResistance)}";
 
         currentXpValueText.text = $"{levelController.CurrentXP}";
@@ -177,13 +177,13 @@ public class LevelUpWindow : PlayerUIWindow
         }
         else if (levelController.IsMaxLevel)
         {
-            needXpValueText.text = $"Достигнут максимальный уровень";
+            needXpValueText.text = $"Р”РѕСЃС‚РёРіРЅСѓС‚ РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СѓСЂРѕРІРµРЅСЊ";
         }
         else
         {
             int needXP = levelController.GetLevelUpCost(levelController.CurrentLevel, newLevel + 1) - levelController.CurrentXP;
 
-            needXpValueText.text = $"До следующего уровня не хватает: {needXP}";
+            needXpValueText.text = $"Р”Рѕ СЃР»РµРґСѓСЋС‰РµРіРѕ СѓСЂРѕРІРЅСЏ РЅРµ С…РІР°С‚Р°РµС‚: {needXP}";
         }
     }
 }

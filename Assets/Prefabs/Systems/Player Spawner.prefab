@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6160352348371565294}
   - component: {fileID: 6688980133692795548}
   - component: {fileID: 498904779915594585}
+  - component: {fileID: 1089687244552212617}
   m_Layer: 0
   m_Name: Player Spawner
   m_TagString: Untagged
@@ -48,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2366972711
+  GlobalObjectIdHash: 1428828760
   InScenePlacedSourceGlobalObjectIdHash: 2366972711
   DeferredDespawnTick: 0
   Ownership: 1
@@ -74,7 +75,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  playerObjectPrefab: {fileID: 588131298879889186, guid: 28dcc0ef760301b44821ac8fe88d7363, type: 3}
+  knightObjectPrefab: {fileID: 588131298879889186, guid: 28dcc0ef760301b44821ac8fe88d7363, type: 3}
+  mageObjectPrefab: {fileID: 999747505511254786, guid: 36c2855e96996364cbbf89f2032c347b, type: 3}
   playerStartPositionOffset: {x: 0, y: 0.25, z: 0}
   debugMode: 0
   startStance: 1
@@ -118,6 +120,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  singleplayerHealthMult: 1
+  singleplayerDamageMult: 1
   healthMultPerPlayer: 0.2
   levelEnemySpawnSettings:
   - Level: 2
@@ -126,3 +130,18 @@ MonoBehaviour:
     Enemies: {fileID: 11400000, guid: 046fa282e081f3542b206397a0f8848c, type: 2}
   - Level: 4
     Enemies: {fileID: 11400000, guid: f2b15ce243892fb4daa00f826aa26da4, type: 2}
+--- !u!114 &1089687244552212617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3132784140880979450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d620049b3a65be644b6cee31a71e6005, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDebugMode: 0
+  singleplayerStartLevelDebug: 6
+  multiplayerStartLevelDebug: 6

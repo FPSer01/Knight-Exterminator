@@ -28,6 +28,8 @@ public class PlayerSFXController : NetworkBehaviour
 
     [Header("Dodge")]
     [SerializeField] private List<AudioClip> dodgeSFX;
+    [SerializeField] private bool useAdditionalDodgeSFX;
+    [SerializeField] private List<AudioClip> additionalDodgeSFX;
 
     [Header("Hurt")]
     [SerializeField] private List<AudioClip> hurtSFX;
@@ -37,6 +39,9 @@ public class PlayerSFXController : NetworkBehaviour
 
     [Header("Heal")]
     [SerializeField] private List<AudioClip> healSFX;
+
+    [Header("Custom")]
+    [SerializeField] private List<SFXCollection> customSFX;
 
     [Header("Stance")]
     [SerializeField] private AudioClip thrustSFX;
@@ -50,6 +55,16 @@ public class PlayerSFXController : NetworkBehaviour
     }
 
     #region General
+
+    public void PlayOneShot(AudioClip clip)
+    {
+        oneShotSource.PlayOneShot(clip);
+    }
+
+    public void PlayOneShot(AudioClip clip, float volume)
+    {
+        oneShotSource.PlayOneShot(clip, volume);
+    }
 
     private void StartPlayCollectionSFX(SFXMultisampleCollection sfxSettings, bool loop = false)
     {
@@ -332,7 +347,6 @@ public class PlayerSFXController : NetworkBehaviour
     private void ExecutePlayAttackSFX()
     {
         var clip = GetRandomClip(attackSFX);
-
         oneShotSource.PlayOneShot(clip);
     }
 
@@ -360,11 +374,19 @@ public class PlayerSFXController : NetworkBehaviour
 
     private void ExecutePlayDodgeSFX()
     {
-        var addClip = GetRandomClip(jumpSFX);
-        oneShotSource.PlayOneShot(addClip);
-
         var mainClip = GetRandomClip(dodgeSFX);
         oneShotSource.PlayOneShot(mainClip);
+
+        if (useAdditionalDodgeSFX)
+        {
+            var addClip = GetRandomClip(additionalDodgeSFX);
+            oneShotSource.PlayOneShot(addClip);
+        }
+        else
+        {
+            var addClip = GetRandomClip(jumpSFX);
+            oneShotSource.PlayOneShot(addClip);
+        }
     }
 
     #endregion
@@ -435,7 +457,8 @@ public class PlayerSFXController : NetworkBehaviour
 
     private void ExecuteStopStanceSFX()
     {
-        shieldSFXLoop.Stop();
+        if (shieldSFXLoop != null)
+            shieldSFXLoop.Stop();
     }
 
     #endregion
@@ -464,6 +487,102 @@ public class PlayerSFXController : NetworkBehaviour
     {
         var clip = GetRandomClip(healSFX);
         oneShotSource.PlayOneShot(clip);
+    }
+
+    #endregion
+
+    #region Custom SFX
+
+    public void PlayCustomSFX(string tag, bool networkSend = true)
+    {
+        ExecutePlayCustomSFX(tag);
+
+        if (networkSend)
+            PlayCustomSFX_NotOwnerRpc(tag);
+    }
+
+    [Rpc(SendTo.NotOwner)]
+    private void PlayCustomSFX_NotOwnerRpc(string tag)
+    {
+        ExecutePlayCustomSFX(tag);
+    }
+
+    private void ExecutePlayCustomSFX(string tag)
+    {
+        bool found = false;
+        SFXCollection collection = customSFX.Find(c => {
+            
+            if (c.Tag == tag)
+            {
+                found = true;
+                return true;
+            }
+
+            return false;
+            });
+
+        if (!found)
+        {
+            Debug.LogError("Нет такого кастомного SFX");
+            return;
+        }
+
+        var randomValue = Random.value;
+
+        if (randomValue <= collection.Chance)
+        {
+            if (collection.OneSFX != null && collection.OneSFXSource != null)
+            {
+                collection.OneSFXSource.clip = collection.OneSFX;
+                collection.OneSFXSource.Play();
+            }
+            else if (collection.ListSFX.Count > 0)
+            {
+                var clip = GetRandomClip(collection.ListSFX);
+
+                PlayOneShot(clip, collection.Volume);
+            }
+        }
+    }
+
+    public void StopCustomSFX(string tag, bool networkSend = true)
+    {
+        ExecuteStopCustomSFX(tag);
+
+        if (networkSend)
+            StopCustomSFX_NotOwnerRpc(tag);
+    }
+
+    [Rpc(SendTo.NotOwner)]
+    private void StopCustomSFX_NotOwnerRpc(string tag)
+    {
+        ExecuteStopCustomSFX(tag);
+    }
+
+    private void ExecuteStopCustomSFX(string tag)
+    {
+        bool found = false;
+        SFXCollection collection = customSFX.Find(c => {
+
+            if (c.Tag == tag)
+            {
+                found = true;
+                return true;
+            }
+
+            return false;
+        });
+
+        if (!found)
+        {
+            Debug.LogError("Нет такого кастомного SFX");
+            return;
+        }
+
+        if (collection.OneSFXSource != null)
+        {
+            collection.OneSFXSource.Stop();
+        }
     }
 
     #endregion

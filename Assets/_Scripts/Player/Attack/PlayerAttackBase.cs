@@ -33,6 +33,8 @@ public class PlayerAttackBase : NetworkBehaviour
     public float AttackSpeedMult { get => attackSpeedMult; set => ChangeAttackSpeedMult(value); }
     public bool EnableInfiniteDamage { get => infiniteDamageCheatEnabled; set => infiniteDamageCheatEnabled = value; }
 
+    public bool IsInitialized = false;
+
     public override void OnNetworkSpawn()
     {
         if (!IsOwner)

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
 
-public class TickAttack : EnemyAttack
+public class TickAttack : EnemyAttack_Old
 {
     [Space]
     [SerializeField] private float healPerAttack;

@@ -11,7 +11,6 @@ public class PlayerHealth : EntityHealth
 {  
     [Header("UI")]
     [SerializeField] private float gameOverDelay;
-    [Space]
     [SerializeField] private TMP_Text healAmountText;
 
     [Header("Heal")]
@@ -36,7 +35,7 @@ public class PlayerHealth : EntityHealth
     private Collider playerCollider => playerComponents.CapsuleCollider;
     private PlayerMovement playerMovement => playerComponents.Movement;
     private PlayerAttackBase playerAttack => playerComponents.Attack;
-    private PlayerStance playerStance => playerComponents.Stance;
+    private PlayerStanceBase playerStance => playerComponents.Stance;
     private Animator animator => playerComponents.Animator;
     private PlayerSFXController sfxController => playerComponents.SfxController;
     private HurtEffect hurtEffect => playerComponents.UI.HurtEffect;

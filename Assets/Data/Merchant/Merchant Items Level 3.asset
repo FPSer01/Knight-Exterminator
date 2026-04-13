@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 242110e5ea78a214b9dd204ad3f77c20, type: 3}
+  m_Name: Merchant Items Level 3
+  m_EditorClassIdentifier: 
+  database: {fileID: 11400000, guid: aaf21ff6ef2f5f747b08d859477c1de1, type: 2}
+  itemPools:
+  - ItemRarity: 0
+    Chance: 0.5
+  - ItemRarity: 1
+    Chance: 0.35
+  - ItemRarity: 2
+    Chance: 0.15

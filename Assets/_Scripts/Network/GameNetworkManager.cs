@@ -17,7 +17,6 @@ public class GameNetworkManager : NetworkManager
     private const string USERNAME_DUBLICATE_FORMAT = "{0} ({1})";
 
     [SerializeField] private ushort maxPlayers = 2;
-    [SerializeField] private bool multiplayerDebugMode = false;
 
     private Dictionary<ulong, string> clientNames = new();
 
@@ -25,16 +24,11 @@ public class GameNetworkManager : NetworkManager
 
     #region Public Interface
 
-/*    public event Action<ulong> OnPlayerConnected;
-    public event Action<ulong> OnPlayerDisconnected;
-
-    private void DoPlayerConnected(ulong clientId) { OnPlayerConnected?.Invoke(clientId); }
-    private void DoPlayerDisconnected(ulong clientId) { OnPlayerDisconnected?.Invoke(clientId); }*/
-
     public static GameNetworkManager Instance { get; private set; }
     public UnityTransport Transport { get; private set; }
     public NetworkGameData GameData { get; private set; }
     public ushort MaxPlayers { get => maxPlayers; }
+    private bool EnableDebugMode => DebugManager.Instance.EnableDebugMode;
     public GameState GameState { get => NetworkGameData.Instance.GameState.Value; private set => NetworkGameData.Instance.GameState.Value = value; }
 
     #endregion
@@ -269,7 +263,7 @@ public class GameNetworkManager : NetworkManager
             return;
 
         GameState = GameState.InGame;
-        LoadManager.Instance.StartMultiplayerGame(multiplayerDebugMode);
+        LoadManager.Instance.StartMultiplayerGame(EnableDebugMode);
     }
 
     public void DisconnectFromLobby()

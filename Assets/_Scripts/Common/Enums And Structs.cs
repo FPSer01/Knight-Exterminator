@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Netcode.Components;
+using Unity.VisualScripting;
 using UnityEngine;
 
 #region Enums
@@ -9,10 +10,17 @@ using UnityEngine;
 public enum StanceType
 {
     None = 0,
+
+    // Рыцарь
     Default = 1,
     Attack = 2,
     Defense = 3,
-    Dexterity = 4
+    Dexterity = 4,
+
+    // Маг
+    Frost = 5,
+    Pyro = 6,
+    Electric = 7
 }
 
 public enum ChunkCullType
@@ -172,7 +180,7 @@ public struct StatusInflictData : INetworkSerializable
     public float BloodlossWearOffTime;
     [Space]
     public float SlownessAmount;
-    public float SlownessIntensity;
+    [Range(0f, 1f)] public float SlownessIntensity;
     public float SlownessWearOffTime;
     [Space]
     public float StunAmount;
@@ -295,7 +303,16 @@ public struct BossPhaseSettings : INetworkSerializable
 [Serializable]
 public struct AttackDamageType : INetworkSerializable
 {
+    public enum MainDamageType
+    {
+        Physical,
+        Fire,
+        Electrical
+    }
+
     [Header("Attack")]
+    public MainDamageType MainType;
+    [Space]
     public float Physical;
     public float Fire;
     public float Electrical;
@@ -306,6 +323,8 @@ public struct AttackDamageType : INetworkSerializable
     [Header("General")]
     public bool IgnoreDefence;
     public bool DisableHurtEffect;
+
+    public float MainDamage { get => GetMainDamage(); set => SetMainDamage(value); }
 
     public AttackDamageType GetMultDamage(float mult, bool affectStatus = false)
     {
@@ -338,6 +357,35 @@ public struct AttackDamageType : INetworkSerializable
         serializer.SerializeValue(ref IgnoreDefence);
         serializer.SerializeValue(ref DisableHurtEffect);
     }
+
+    private void SetMainDamage(float newDamageValue)
+    {
+        switch (MainType) 
+        {
+            case MainDamageType.Physical: 
+                Physical = newDamageValue;
+                break;
+
+            case MainDamageType.Fire: 
+                Fire = newDamageValue; 
+                break;
+
+            case MainDamageType.Electrical:
+                Electrical = newDamageValue;
+                break;
+        }
+    }
+
+    private float GetMainDamage()
+    {
+        switch (MainType)
+        {
+            case MainDamageType.Physical: return Physical;
+            case MainDamageType.Fire: return Fire;
+            case MainDamageType.Electrical: return Electrical;
+            default: return Physical;
+        }
+    }
 }
 
 [Serializable]
@@ -354,8 +402,12 @@ public struct SFXMultisampleCollection
 public struct SFXCollection
 {
     public string Tag;
+    [Space]
+    public AudioSource OneSFXSource;
     public AudioClip OneSFX;
+    [Space]
     public List<AudioClip> ListSFX;
+    [Space]
     [Range(0f, 1f)] public float Volume;
     [Range(0f, 1f)] public float Chance;
 }
@@ -376,12 +428,23 @@ public struct EnemyTargetData
     public NetworkObject NetworkObject;
     public PlayerComponents Components;
 
-    public Vector3 Position => Components.Movement.transform.position;
+    public Vector3 Position => GetTargetPosition();
     public bool IsDead => Components.Health.IsDead;
 
     public bool IsValid => PlayerObject != null && NetworkObject.IsSpawned;
 
     #region Methods
+
+    private Vector3 GetTargetPosition()
+    {
+        if (Components == null)
+            return default;
+
+        if (Components.Movement == null)
+            return default;
+
+        return Components.Movement.transform.position;
+    }
 
     public static bool operator ==(EnemyTargetData a, EnemyTargetData b)
     {
@@ -422,6 +485,10 @@ public class GameScenes
 public static class StartGameData
 {
     public static bool SingleplayerOneLife { get; set; }
+
+    /// <summary>
+    /// Выбранная стойка (ТОЛЬКО В ОДИНОЧНОМ РЕЖИМЕ)
+    /// </summary>
     public static StanceType Stance { get; set; }
     public static Gamemode GameMode {
         set => gamemode = value;

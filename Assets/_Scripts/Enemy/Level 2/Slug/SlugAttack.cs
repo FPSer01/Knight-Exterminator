@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class SlugAttack : EnemyAttack
+public class SlugAttack : EnemyAttack_Old
 {
     [Header("Projectile")]
     [SerializeField] private Transform projectileSpawnPoint;

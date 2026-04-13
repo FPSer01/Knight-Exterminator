@@ -1,5 +1,68 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2012799414635993489
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 541902798498373982}
+  m_Layer: 0
+  m_Name: Dynamic Objects Points
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &541902798498373982
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012799414635993489}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3214907569651327610}
+  m_Father: {fileID: 5629074725768422412}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3744788232462339185
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3214907569651327610}
+  m_Layer: 0
+  m_Name: Merchant Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3214907569651327610
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3744788232462339185}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.70710576, z: -0, w: 0.70710784}
+  m_LocalPosition: {x: 4.3690033, y: 1.2329998, z: -2.0160065}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 541902798498373982}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &469387895618141778
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1842,77 +1905,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1578495243843198665, guid: 765a629eff69c544a9580dca7db2d9cc, type: 3}
   m_PrefabInstance: {fileID: 4053471944073445831}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &4126934021077522420
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 5629074725768422412}
-    m_Modifications:
-    - target: {fileID: 4250967473947625781, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-      propertyPath: m_Name
-      value: Merchant
-      objectReference: {fileID: 0}
-    - target: {fileID: 5103518991771468917, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-      propertyPath: itemChance
-      value: 
-      objectReference: {fileID: 11400000, guid: 41b716d805aabe348aefa64afca21f5c, type: 2}
-    - target: {fileID: 6512175091150175146, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 4.369
-      objectReference: {fileID: 0}
-    - target: {fileID: 6512175091150175146, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.233
-      objectReference: {fileID: 0}
-    - target: {fileID: 6512175091150175146, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -2.016
-      objectReference: {fileID: 0}
-    - target: {fileID: 6512175091150175146, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.70710784
-      objectReference: {fileID: 0}
-    - target: {fileID: 6512175091150175146, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6512175091150175146, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.70710576
-      objectReference: {fileID: 0}
-    - target: {fileID: 6512175091150175146, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6512175091150175146, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6512175091150175146, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 6512175091150175146, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
---- !u!1 &268994168660926145 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4250967473947625781, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-  m_PrefabInstance: {fileID: 4126934021077522420}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7141077464732396638 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6512175091150175146, guid: e827906b8343a864eb789e6a37987c5d, type: 3}
-  m_PrefabInstance: {fileID: 4126934021077522420}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4239989750829041781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3502,10 +3494,6 @@ PrefabInstance:
       propertyPath: 'cullObjects.Array.data[70]'
       value: 
       objectReference: {fileID: 7094207867564863464}
-    - target: {fileID: 887140850214121979, guid: 48249fc624504684c992ed7ce89971f5, type: 3}
-      propertyPath: 'cullObjects.Array.data[71]'
-      value: 
-      objectReference: {fileID: 268994168660926145}
     - target: {fileID: 1706586381352649340, guid: 48249fc624504684c992ed7ce89971f5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.798
@@ -3566,8 +3554,8 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3027575729047849311, guid: 48249fc624504684c992ed7ce89971f5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7141077464732396638}
+      insertIndex: 0
+      addedObject: {fileID: 541902798498373982}
     - targetCorrespondingSourceObject: {fileID: 1088419594762691032, guid: 48249fc624504684c992ed7ce89971f5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3681721196971878744}
@@ -3712,8 +3700,33 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1088419594762691032, guid: 48249fc624504684c992ed7ce89971f5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1828053161861948215}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6947660198893527133, guid: 48249fc624504684c992ed7ce89971f5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8592955307489886145}
   m_SourcePrefab: {fileID: 100100000, guid: 48249fc624504684c992ed7ce89971f5, type: 3}
+--- !u!1 &320157538875641102 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6947660198893527133, guid: 48249fc624504684c992ed7ce89971f5, type: 3}
+  m_PrefabInstance: {fileID: 7213185188169493843}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8592955307489886145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320157538875641102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2704bb4d009c4fc4994f4583a3b7a299, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnSettings:
+  - tag: Merchant
+    spawnAmount: 1
+    possiblePoints:
+    - {fileID: 3214907569651327610}
 --- !u!4 &5629074725768422412 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3027575729047849311, guid: 48249fc624504684c992ed7ce89971f5, type: 3}
@@ -4305,6 +4318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aadcb2330ab5554fb42a6b5b5a9c525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   toolTipText: "\u041F\u043E\u0432\u044B\u0441\u0438\u0442\u044C \u0443\u0440\u043E\u0432\u0435\u043D\u044C"
   outline: {fileID: 4294061328038733951}
 --- !u!4 &3416887442444029671 stripped

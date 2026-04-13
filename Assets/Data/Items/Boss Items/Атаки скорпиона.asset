@@ -24,8 +24,10 @@ MonoBehaviour:
   canBeSold: 1
   buyCost: 0
   sellCost: 1500
+  mainDamage: 70
   flatDamage:
-    Physical: 70
+    MainType: 0
+    Physical: 0
     Fire: 0
     Electrical: 0
     StatusData:
@@ -40,8 +42,10 @@ MonoBehaviour:
       StunWearOffTime: 0
     IgnoreDefence: 0
     DisableHurtEffect: 0
+  mainDamageMult: 0
   elementPercentDamageFromPhysical: 0
   percentDamage:
+    MainType: 0
     Physical: 0
     Fire: 0
     Electrical: 0

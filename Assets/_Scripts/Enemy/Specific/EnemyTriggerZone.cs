@@ -1,7 +1,8 @@
-using System;
+﻿using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class EnemyTriggerZone : MonoBehaviour
+public class EnemyTriggerZone : NetworkBehaviour
 {
     [SerializeField] private Collider triggerCollider;
 
@@ -13,6 +14,12 @@ public class EnemyTriggerZone : MonoBehaviour
     }
 
     public void SetCollider(bool active)
+    {
+        SetCollider_EveryoneRpc(active);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void SetCollider_EveryoneRpc(bool active)
     {
         triggerCollider.enabled = active;
     }
