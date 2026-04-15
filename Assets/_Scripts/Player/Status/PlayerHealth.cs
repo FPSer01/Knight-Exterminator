@@ -451,6 +451,11 @@ public class PlayerHealth : EntityHealth
     public void SetReflectStance(bool active, float cutDamageMult = 0f)
     {
         reflectActive = active;
+        SetCutDamageMult(cutDamageMult);
+    }
+
+    public void SetCutDamageMult(float cutDamageMult)
+    {
         this.cutDamageMult = cutDamageMult;
     }
 

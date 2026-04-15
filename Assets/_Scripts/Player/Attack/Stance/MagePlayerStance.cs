@@ -78,6 +78,7 @@ public class MagePlayerStance : PlayerStanceBase
     [Header("Electro Stance")]
     [SerializeField] private PlayerAttackMultiCollider electroAttackCollider;
     [SerializeField] private float electroAttackMult = 2f;
+    [Range(0f, 1f)] [SerializeField] private float electroDamageTakenMult = 0;
     [SerializeField] private float electroAttackBeforeDelay;
     [SerializeField] private float electroAttackAfterDelay;
 
@@ -217,7 +218,9 @@ public class MagePlayerStance : PlayerStanceBase
 
     private void FrostAttackCollider_OnHit(EntityHealth enemy, HitTransform hitPos)
     {
-        float enemyDamageTaken = enemy.TakeDamage(playerAttack.AttackDamage.GetMultDamage(frostAttackMult), playerComponents.Health);
+        AttackDamageType frostAttackDamage = playerAttack.AttackDamage.GetMultDamage(frostAttackMult);
+
+        float enemyDamageTaken = enemy.TakeDamage(frostAttackDamage, playerComponents.Health);
         enemy.CreateHitEffect(hitPos);
 
         playerAttack.TryVampireHeal(enemyDamageTaken);
@@ -342,7 +345,9 @@ public class MagePlayerStance : PlayerStanceBase
 
     private void Meteors_OnHit(EntityHealth enemy, HitTransform hitPos)
     {
-        float enemyDamageTaken = enemy.TakeDamage(playerAttack.AttackDamage.GetMultDamage(pyroAttackMult), playerComponents.Health);
+        AttackDamageType meteorsAttackDamage = playerAttack.AttackDamage.GetMultDamage(pyroAttackMult);
+
+        float enemyDamageTaken = enemy.TakeDamage(meteorsAttackDamage, playerComponents.Health);
         enemy.CreateHitEffect(hitPos);
 
         playerAttack.TryVampireHeal(enemyDamageTaken);
@@ -368,6 +373,7 @@ public class MagePlayerStance : PlayerStanceBase
 
         yield return new WaitForSeconds(electroAttackBeforeDelay);
 
+        playerHealth.SetCutDamageMult(electroDamageTakenMult);
         playerState.DoStanceBarAnimation(0, currentStance.Duration + electroAttackAfterDelay);
 
         SetBlockAnimation(true);
@@ -383,6 +389,7 @@ public class MagePlayerStance : PlayerStanceBase
 
         yield return new WaitForSeconds(electroAttackAfterDelay);
 
+        playerHealth.SetCutDamageMult(0);
         SetBlockAnimation(false);
         playerComponents.ActivateRig(true);
         playerMovement.BlockMovement(false);
@@ -394,7 +401,10 @@ public class MagePlayerStance : PlayerStanceBase
 
     private void ElectroAttackCollider_OnHit(EntityHealth enemy, HitTransform hitPos)
     {
-        float enemyDamageTaken = enemy.TakeDamage(playerAttack.AttackDamage.GetMultDamage(electroAttackMult), playerComponents.Health);
+        AttackDamageType electroAttackDamage = playerAttack.AttackDamage.GetMultDamage(electroAttackMult);
+        electroAttackDamage.IgnoreDefence = true;
+
+        float enemyDamageTaken = enemy.TakeDamage(electroAttackDamage, playerComponents.Health);
         enemy.CreateHitEffect(hitPos);
 
         playerAttack.TryVampireHeal(enemyDamageTaken);

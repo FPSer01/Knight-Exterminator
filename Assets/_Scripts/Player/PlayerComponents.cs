@@ -43,9 +43,6 @@ public class PlayerComponents : NetworkBehaviour
     [Header("Utility")]
     [SerializeField] private SpectatorTarget spectatorTarget;
 
-    [Header("Cloth")]
-    [SerializeField] private List<Cloth> cloths;
-
     #region Public
 
     public KE.CameraController CameraController { get => cameraController; }
@@ -148,48 +145,6 @@ public class PlayerComponents : NetworkBehaviour
             {
                 layer.active = activate;
             }
-        }
-    }
-
-    #endregion
-
-    #region Cloth Utility
-
-    public void ResetCloths()
-    {
-        StartCoroutine(ClothReset());
-        ResetCloths_NotOwnerRpc();
-    }
-
-    [Rpc(SendTo.NotOwner)]
-    private void ResetCloths_NotOwnerRpc()
-    {
-        StartCoroutine(ClothReset());
-    }
-
-    private IEnumerator ClothReset()
-    {
-        if (cloths == null)
-            yield break;
-
-        foreach (var cloth in cloths)
-        {
-            if (cloth == null)
-                continue;
-
-            cloth.enabled = false;
-            cloth.ClearTransformMotion();
-        }
-
-        yield return new WaitForFixedUpdate();
-
-        foreach (var cloth in cloths)
-        {
-            if (cloth == null)
-                continue;
-
-            cloth.enabled = true;
-            cloth.ClearTransformMotion();
         }
     }
 

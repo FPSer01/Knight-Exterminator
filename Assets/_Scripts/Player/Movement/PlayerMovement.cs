@@ -756,8 +756,6 @@ public class PlayerMovement : NetworkBehaviour
 
         rb.position = position;
         rb.isKinematic = false;
-
-        playerComponents.ResetCloths();
     }
 
     private void OnDrawGizmos()
