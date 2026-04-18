@@ -61,6 +61,10 @@ public class EnemyObjectSpawner : NetworkBehaviour
     [SerializeField] private TimeframeSpawnSettings timeframeSettings;
     private Coroutine timeframeSpawnCoroutine;
     [Space]
+    [SerializeField] private OnHitSpawnSettings onHitSettings;
+    private Coroutine onHitSpawnCoroutine;
+    private bool onHitEnabled;
+    [Space]
     [SerializeField] private EnemyComponents components;
 
     public override void OnNetworkSpawn()
@@ -70,6 +74,7 @@ public class EnemyObjectSpawner : NetworkBehaviour
 
         StartSpawnWithDistance(distanceSettings.StartSpawnAfterInitiate);
         StartSpawnWithTimeframe(timeframeSettings.StartSpawnAfterInitiate);
+        StartSpawnWithOnHit(onHitSettings.StartSpawnAfterInitiate);
     }
 
     private NetworkObject TrySpawnNetworkPrefab(GameObject prefab, Vector3 position, Quaternion rotation)
@@ -212,39 +217,67 @@ public class EnemyObjectSpawner : NetworkBehaviour
 
     #region Spawn On Hit (Damage Taken)
 
-    /*private void SubsribeToOnHit(SpawnSettings settings)
+    private void StartSpawnWithOnHit(bool enable)
     {
-        components.Health.OnDamageTaken += (damageTaken) =>
-        {
-            SpawnOnHit(settings);
-        };
-    }
-
-    private void SpawnOnHit(SpawnSettings settings)
-    {
-        if (settings.SpawnType != SpawnType.OnHit)
+        if (onHitSettings == null)
             return;
 
-        var point = settings.GetRandomSpawnPoint();
-        var prefab = settings.GetRandomPrefab();
+        if (onHitSpawnCoroutine != null)
+        {
+            StopCoroutine(onHitSpawnCoroutine);
+            onHitSpawnCoroutine = null;
+        }
+
+        if (enable && !onHitEnabled)
+        {
+            onHitEnabled = true;
+            components.Health.OnDamageTaken += Health_OnDamageTaken;
+        }
+        else if (!enable && onHitEnabled)
+        {
+            onHitEnabled = false;
+            components.Health.OnDamageTaken -= Health_OnDamageTaken;
+        }
+    }
+
+    private IEnumerator OnHitCooldown()
+    {
+        yield return new WaitForSeconds(onHitSettings.SpawnCooldown);
+
+        onHitSpawnCoroutine = null;
+    }
+
+    private void Health_OnDamageTaken(float damage)
+    {
+        if (onHitSpawnCoroutine != null)
+            return;
+
+        var point = onHitSettings.GetRandomSpawnPoint();
+        var prefab = onHitSettings.GetRandomPrefab();
 
         point.GetPositionAndRotation(out Vector3 position, out Quaternion rotation);
 
-        if (settings.UseRaycast)
+        bool spawnFromRaycast = false;
+
+        if (onHitSettings.UseRaycast)
         {
-            if (Physics.Raycast(point.position, point.forward, out RaycastHit hit, settings.RaycastDistance, settings.RaycastMask))
+            if (Physics.Raycast(point.position, point.forward, out RaycastHit hit, onHitSettings.RaycastDistance, onHitSettings.RaycastMask))
             {
                 position = hit.point;
                 rotation = Quaternion.LookRotation(hit.normal);
-            }
-            else
-            {
-                return;
+
+                spawnFromRaycast = true;
             }
         }
 
+        if (onHitSettings.UseRaycast && !spawnFromRaycast)
+        {
+            return;
+        }
+
         TrySpawnNetworkPrefab(prefab, position, rotation);
-    }*/
+        onHitSpawnCoroutine = StartCoroutine(OnHitCooldown());
+    }
 
     #endregion
 }

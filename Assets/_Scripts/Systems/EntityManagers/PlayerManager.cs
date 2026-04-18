@@ -118,14 +118,13 @@ public class PlayerManager : NetworkBehaviour
         StanceType stance = StanceType.None;
 
         // Берем выбранную стойку (класс)
-        if (NetworkManager.ConnectedClients[clientId].PlayerObject.TryGetComponent(out PlayerNetworkObject playerStartData))
+        foreach (var clientObject in NetworkManager.ConnectedClients[clientId].OwnedObjects)
         {
-            stance = playerStartData.Stance.Value;
-        }
-        else
-        {
-            Debug.Log($"{DEBUG_TAG} Setup Player: PlayerNetworkObject not found");
-            return;
+            if (clientObject.TryGetComponent(out PlayerNetworkObject playerStartData))
+            {
+                stance = playerStartData.Stance.Value;
+                break;
+            }
         }
 
         // Спавним объект

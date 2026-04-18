@@ -1729,6 +1729,16 @@ MonoBehaviour:
       m_Bits: 0
     FirstSpawnDelay: 0
     Timeframe: 0
+  onHitSettings:
+    SpawnPoints: []
+    Prefabs: []
+    StartSpawnAfterInitiate: 1
+    UseRaycast: 0
+    RaycastDistance: 0
+    RaycastMask:
+      serializedVersion: 2
+      m_Bits: 0
+    SpawnCooldown: 0
   components: {fileID: 5719654567809816498}
 --- !u!1 &829737757799381696
 GameObject:
@@ -9598,6 +9608,16 @@ MonoBehaviour:
       m_Bits: 0
     FirstSpawnDelay: 2.5
     Timeframe: 2.5
+  onHitSettings:
+    SpawnPoints: []
+    Prefabs: []
+    StartSpawnAfterInitiate: 1
+    UseRaycast: 0
+    RaycastDistance: 0
+    RaycastMask:
+      serializedVersion: 2
+      m_Bits: 0
+    SpawnCooldown: 0
   components: {fileID: 5719654567809816498}
 --- !u!1 &5563146905125003083
 GameObject:

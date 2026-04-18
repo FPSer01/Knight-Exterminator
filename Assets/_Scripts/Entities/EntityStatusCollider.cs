@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EntityStatusCollider : NetworkBehaviour
 {
@@ -24,6 +25,7 @@ public class EntityStatusCollider : NetworkBehaviour
 
     [Header("Movement")]
     [SerializeField] private bool useMovement;
+    [SerializeField] private bool randomDirection;
     [SerializeField] private Vector3 moveDirection;
     [SerializeField] private float moveDistance;
     [SerializeField] private float moveTime;
@@ -45,7 +47,17 @@ public class EntityStatusCollider : NetworkBehaviour
 
         if (useMovement)
         {
-            Vector3 endPos = transform.position + moveDirection.normalized * moveDistance;
+            Vector3 endPos;
+
+            if (randomDirection)
+            {
+                endPos = transform.position + Random.onUnitSphere.normalized * moveDistance;
+            }
+            else
+            {
+                endPos = transform.position + moveDirection.normalized * moveDistance;
+            }
+
             transform.DOMove(endPos, moveTime);
         }
 

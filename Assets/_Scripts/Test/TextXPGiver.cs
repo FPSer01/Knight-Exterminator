@@ -6,7 +6,7 @@ public class TestXPGiver : MonoBehaviour, IInteractable
     [SerializeField] private string toolTipText;
     [SerializeField] private Outline outline;
     [Space]
-    [SerializeField] private Transform teleportPoint;
+    [SerializeField] private int xpToGive;
 
     private void Start()
     {
@@ -25,11 +25,17 @@ public class TestXPGiver : MonoBehaviour, IInteractable
 
     public void Interact(GameObject sender)
     {
-        PlayerInteraction senderPlayer = sender.GetComponent<PlayerInteraction>();
+        PlayerLevelController levelController = sender.GetComponentInChildren<PlayerLevelController>();
 
-        if (senderPlayer != null)
+        if (levelController != null)
         {
-            PlayerManager.Instance.TeleportPlayer(senderPlayer.OwnerClientId, teleportPoint.position);       
+            levelController.ChangeXP(xpToGive);
         }
+        else
+        {
+            EnemyManager.Instance.DoOnEnemyXPDrop(xpToGive);
+        }
+
+        
     }
 }
