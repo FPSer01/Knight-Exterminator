@@ -358,6 +358,9 @@ public class EnemyMeleeBehaviour : BaseEnemyBehaviour
         Gizmos.DrawLine(transform.position, Quaternion.Euler(0, attackAngle / 2, 0) * transform.forward * attackDistance + transform.position);
         Gizmos.DrawLine(transform.position, Quaternion.Euler(0, -attackAngle / 2, 0) * transform.forward * attackDistance + transform.position);
 
+        if (dodgePaths == null)
+            return;
+
         foreach (var spline in dodgePaths.Splines)
         {
             int steps = 30;

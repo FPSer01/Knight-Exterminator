@@ -163,6 +163,11 @@ public abstract class EntityHealth : NetworkBehaviour
         NetworkObject.Despawn();
     }
 
+    public void ForceTriggerDeath()
+    {
+        SetDeathStatus_ServerRpc(true);
+    }
+
     #endregion
 
     #region Status Methods

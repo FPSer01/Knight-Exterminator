@@ -31,6 +31,8 @@ public abstract class BaseEnemyBehaviour : NetworkBehaviour
 
     protected Method state;
 
+    public NavMeshAgent Agent { get => agent; }
+
     #region Network API
 
     public override void OnNetworkSpawn()

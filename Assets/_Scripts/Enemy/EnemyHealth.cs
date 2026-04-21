@@ -85,11 +85,15 @@ public class EnemyHealth : EntityHealth, ICameraLockable
         if (!enabled)
             return;
 
-        enemyCollider.enabled = false;
-        components.Behaviour.enabled = false;
+        if (components != null)
+        {
+            enemyCollider.enabled = false;
+            components.Behaviour.enabled = false;
+            sfxController.PlayDeathSFX(deathSFXVolume);
+        }
 
-        healthUI.StopAllProcesses();
-        sfxController.PlayDeathSFX(deathSFXVolume);
+        if (healthUI != null)
+            healthUI.StopAllProcesses();
 
         RequestEnemyDespawn_ServerRpc(Time.fixedDeltaTime);
     }
